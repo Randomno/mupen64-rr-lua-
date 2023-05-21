@@ -86,10 +86,6 @@ void display_loading_progress(int p)
    if (p==100) printf("\n");
 }
 
-void display_MD5calculating_progress(int p)
-{
-}
-
 int ask_bad()
 {
    char c;

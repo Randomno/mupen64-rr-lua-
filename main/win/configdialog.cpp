@@ -68,9 +68,6 @@ HWND hwndTrackMovieBackup;
 extern int no_audio_delay;
 extern int no_compiled_jump;
 
-BOOL LuaCriticalSettingChangePending; // other options proc
-
-
 void SwitchMovieBackupModifier(HWND hwnd) {
 	if (ReadCheckBoxValue(hwnd, IDC_MOVIEBACKUPS)) {
 		EnableWindow(hwndTrackMovieBackup, TRUE);
@@ -136,16 +133,16 @@ BOOL CALLBACK OtherOptionsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lP
 				Config.synchronization_mode = VCR_SYNC_NONE;
 			break;
 		}
-		case IDC_COMBO_CLOCK_SPD_MULT:
-			ReadComboBoxValue(hwnd, IDC_COMBO_CLOCK_SPD_MULT, buf);
-			Config.cpu_clock_speed_multiplier = atoi(&buf[0]);
-			break;
-		case IDC_MOVIEBACKUPS:
-			SwitchMovieBackupModifier(hwnd);
-		}
-
+	case IDC_COMBO_CLOCK_SPD_MULT:
+		ReadComboBoxValue(hwnd, IDC_COMBO_CLOCK_SPD_MULT, buf);
+		Config.cpu_clock_speed_multiplier = atoi(&buf[0]);
 		break;
-	
+	case IDC_MOVIEBACKUPS:
+		SwitchMovieBackupModifier(hwnd);
+	}
+
+				   break;
+
 
 	case WM_NOTIFY:
 	{
@@ -288,42 +285,6 @@ void ChangeSettings(HWND hwndOwner) {
 	if (PropertySheet(&psh)) save_config();
 	return;
 }
-
-////Taken from windows docs
-//HWND CreateToolTip(int toolID, HWND hDlg, PTSTR pszText)
-//{
-//    if (!toolID || !hDlg || !pszText)
-//    {
-//        return FALSE;
-//    }
-//    // Get the window of the tool.
-//    HWND hwndTool = GetDlgItem(hDlg, toolID);
-//
-//    // Create the tooltip. g_hInst is the global instance handle.
-//    HWND hwndTip = CreateWindowEx(NULL, TOOLTIPS_CLASS, NULL,
-//        WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON,
-//        CW_USEDEFAULT, CW_USEDEFAULT,
-//        CW_USEDEFAULT, CW_USEDEFAULT,
-//        hDlg, NULL,
-//        GetModuleHandle(NULL), NULL);
-//
-//    if (!hwndTool || !hwndTip)
-//    {
-//        return (HWND)NULL;
-//    }
-//
-//    // Associate the tooltip with the tool.
-//    TOOLINFO toolInfo = { 0 };
-//    toolInfo.cbSize = sizeof(toolInfo);
-//    toolInfo.hwnd = hDlg;
-//    toolInfo.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
-//    toolInfo.uId = (UINT_PTR)hwndTool;
-//    toolInfo.lpszText = pszText;
-//    SendMessage(hwndTip, TTM_ADDTOOL, 0, (LPARAM)&toolInfo);
-//
-//    return hwndTip;
-//}
-
 
 BOOL CALLBACK AboutDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
@@ -768,6 +729,7 @@ void FillModifierValue(HWND hwnd, int value) {
 	SetDlgItemText(hwnd, IDC_SPEEDMODIFIER_VALUE, temp);
 }
 
+
 BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 {
 
@@ -779,7 +741,9 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		WriteCheckBoxValue(hwnd, IDC_ALERTSAVESTATEWARNINGS, Config.is_savestate_warning_enabled);
 		WriteCheckBoxValue(hwnd, IDC_LIMITFPS, Config.is_fps_limited);
 		WriteCheckBoxValue(hwnd, IDC_0INDEX, Config.is_frame_count_visual_zero_index);
-		SendMessage(GetDlgItem(hwnd, IDC_FPSTRACKBAR), TBM_SETPOS, TRUE, Config.fps_modifier);
+		SendMessage(GetDlgItem(hwnd, IDC_SPEED_MODIFIER_SLIDER), TBM_SETRANGEMIN, TRUE, 0);
+		SendMessage(GetDlgItem(hwnd, IDC_SPEED_MODIFIER_SLIDER), TBM_SETRANGEMAX, TRUE, 200);
+		SendMessage(GetDlgItem(hwnd, IDC_SPEED_MODIFIER_SLIDER), TBM_SETPOS, TRUE, Config.fps_modifier);
 		SetDlgItemInt(hwnd, IDC_SKIPFREQ, Config.frame_skip_frequency, 0);
 		WriteCheckBoxValue(hwnd, IDC_ALLOW_ARBITRARY_SAVESTATE_LOADING, Config.is_state_independent_state_loading_allowed);
 
@@ -835,21 +799,22 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		case  IDC_SPEEDMODIFIER:
 			SwitchModifier(hwnd);
 			break;
+		case IDC_SPEED_MODIFIER_RESET:
+			SendMessage(GetDlgItem(hwnd, IDC_SPEED_MODIFIER_SLIDER), TBM_SETPOS, TRUE, default_config.fps_modifier);
+			break;
 
 		}
 		break;
-
 	case WM_NOTIFY:
-		//if (((NMHDR FAR *) lParam)->code == NM_RELEASEDCAPTURE)  {
-  //           FillModifierValue( hwnd, SendMessage(GetDlgItem(hwnd, IDC_FPSTRACKBAR), TBM_GETPOS, 0, 0));
-  //      }
-		if (((NMHDR FAR*) lParam)->code == PSN_APPLY) {
+		switch (((LPNMHDR)lParam)->code)
+		{
+		case PSN_APPLY:
 			Config.show_fps = ReadCheckBoxValue(hwnd, IDC_SHOWFPS);
 			Config.show_vis_per_second = ReadCheckBoxValue(hwnd, IDC_SHOWVIS);
 			Config.prevent_suspicious_rom_loading = ReadCheckBoxValue(hwnd, IDC_MANAGEBADROM);
 			Config.is_savestate_warning_enabled = ReadCheckBoxValue(hwnd, IDC_ALERTSAVESTATEWARNINGS);
 			Config.is_fps_limited = ReadCheckBoxValue(hwnd, IDC_LIMITFPS);
-			Config.fps_modifier = SendMessage(GetDlgItem(hwnd, IDC_FPSTRACKBAR), TBM_GETPOS, 0, 0);
+			Config.fps_modifier = SendMessage(GetDlgItem(hwnd, IDC_SPEED_MODIFIER_SLIDER), TBM_GETPOS, 0, 0);
 			Config.frame_skip_frequency = GetDlgItemInt(hwnd, IDC_SKIPFREQ, 0, 0);
 			Config.is_frame_count_visual_zero_index = ReadCheckBoxValue(hwnd, IDC_0INDEX);
 			Config.is_state_independent_state_loading_allowed = ReadCheckBoxValue(hwnd, IDC_ALLOW_ARBITRARY_SAVESTATE_LOADING);
@@ -857,6 +822,8 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			if (emu_launched) SetStatusMode(2);
 			else SetStatusMode(0);
 			InitTimer();
+
+			break;
 		}
 		break;
 	default:
@@ -865,93 +832,7 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-DWORD WINAPI ScanThread(LPVOID lpParam) {
 
-	int i;
-	ROM_INFO* pRomInfo;
-	md5_byte_t digest[16];
-	char tempname[100];
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_STOP), TRUE);
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_START), FALSE);
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_CLOSE), FALSE);
-	for (i = 0; i < ItemList.ListCount; i++)
-	{
-		if (stopScan) break;
-		pRomInfo = &ItemList.List[i];
-		sprintf(TempMessage, "%d", i + 1);
-		SetDlgItemText(romInfoHWND, IDC_CURRENT_ROM, TempMessage);
-		SetDlgItemText(romInfoHWND, IDC_ROM_FULLPATH, pRomInfo->szFullFileName);
-		//SendMessage( GetDlgItem(romInfoHWND, IDC_TOTAL_ROMS_PROGRESS), PBM_STEPIT, 0, 0 ); 
-		SendMessage(GetDlgItem(romInfoHWND, IDC_TOTAL_ROMS_PROGRESS), PBM_SETPOS, i + 1, 0);
-
-		strcpy(TempMessage, pRomInfo->MD5);
-		if (!strcmp(TempMessage, "")) {
-			calculateMD5(pRomInfo->szFullFileName, digest);
-			MD5toString(digest, TempMessage);
-		}
-		strcpy(pRomInfo->MD5, TempMessage);
-		if (getIniGoodNameByMD5(TempMessage, tempname))
-			strcpy(pRomInfo->GoodName, tempname);
-		else
-			sprintf(pRomInfo->GoodName, "%s (not found in INI file)", pRomInfo->InternalName);
-	}
-	//SendMessage( GetDlgItem(romInfoHWND, IDC_TOTAL_ROMS_PROGRESS), PBM_SETPOS, 0, 0 );
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_STOP), FALSE);
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_START), TRUE);
-	EnableWindow(GetDlgItem(romInfoHWND, IDC_AUDIT_CLOSE), TRUE);
-	ExitThread(dwExitCode);
-}
-
-BOOL CALLBACK AuditDlgProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
-	ROM_INFO* pRomInfo;
-	HWND hwndPB1, hwndPB2;    //Progress Bar
-
-	switch (Message) {
-	case WM_INITDIALOG:
-		pRomInfo = &ItemList.List[0];
-		SetDlgItemText(hwnd, IDC_ROM_FULLPATH, pRomInfo->szFullFileName);
-		sprintf(TempMessage, "%d", ItemList.ListCount);
-		SetDlgItemText(hwnd, IDC_TOTAL_ROMS, TempMessage);
-		SetDlgItemText(hwnd, IDC_CURRENT_ROM, "");
-
-		hwndPB1 = GetDlgItem(hwnd, IDC_CURRENT_ROM_PROGRESS);
-		hwndPB2 = GetDlgItem(hwnd, IDC_TOTAL_ROMS_PROGRESS);
-		SendMessage(hwndPB1, PBM_SETRANGE, 0, MAKELPARAM(0, 100));
-		SendMessage(hwndPB1, PBM_SETSTEP, (WPARAM)1, 0);
-		SendMessage(hwndPB2, PBM_SETRANGE, 0, MAKELPARAM(0, ItemList.ListCount));
-		SendMessage(hwndPB2, PBM_SETSTEP, (WPARAM)1, 0);
-
-
-		TranslateAuditDialog(hwnd);
-		return TRUE;
-	case WM_COMMAND:
-		switch (LOWORD(wParam))
-		{
-		case IDC_AUDIT_START:
-			romInfoHWND = hwnd;
-			stopScan = FALSE;
-			EmuThreadHandle = CreateThread(NULL, 0, ScanThread, NULL, 0, &Id);
-			break;
-		case IDC_AUDIT_STOP:
-			stopScan = TRUE;
-			break;
-		case IDCANCEL:
-		case IDC_AUDIT_CLOSE:
-			stopScan = TRUE;
-			romInfoHWND = NULL;
-			//FastRefreshBrowser();
-			if (!emu_launched) {
-				ShowWindow(hRomList, FALSE);
-				ShowWindow(hRomList, TRUE);
-			}
-
-			EndDialog(hwnd, IDOK);
-			break;
-		}
-	default:
-		return FALSE;
-	}
-}
 BOOL CALLBACK LangInfoProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
 	switch (Message) {
 	case WM_INITDIALOG:
@@ -962,7 +843,6 @@ BOOL CALLBACK LangInfoProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam
 		{
 		case IDOK:
 		case IDCANCEL:
-		case IDC_AUDIT_CLOSE:
 			EndDialog(hwnd, IDOK);
 			break;
 		}

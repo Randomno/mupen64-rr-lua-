@@ -3212,8 +3212,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		case ID_AUDIT_ROMS:
-			ret = DialogBox(GetModuleHandle(NULL),
-				MAKEINTRESOURCE(IDD_AUDIT_ROMS_DIALOG), hwnd, AuditDlgProc);
+			audit_roms();
 			break;
 		case ID_HELP_ABOUT:
 		{

@@ -356,6 +356,7 @@ typedef struct _CONFIG {
 
 extern "C" CONFIG Config;
 extern std::vector<t_hotkey*> hotkeys;
+extern const CONFIG default_config;
 
 CONFIG get_default_config();
 void hotkey_to_string(t_hotkey* hotkey, char* string);

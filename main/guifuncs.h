@@ -30,7 +30,6 @@
 char *get_currentpath();
 const char *get_savespath();
 void display_loading_progress(int p);
-void display_MD5calculating_progress(int p);
 
 void new_frame();
 void new_vi();

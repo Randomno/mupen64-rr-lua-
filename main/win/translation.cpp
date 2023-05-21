@@ -405,19 +405,6 @@ void TranslateRomBrowserMenu(HMENU hMenu)
     SetMenuTranslatedString(hMenu,3,"Refresh ROM List","Ctrl Alt R");
 }
 
-void TranslateAuditDialog(HWND hwnd)
-{
-    char tmp[200];
-    SetItemTranslatedString(hwnd,IDC_TOTAL_ROMS_TEXT,"Audit Total ROMs");
-    SetItemTranslatedString(hwnd,IDC_CURRENT_ROM_TEXT,"Audit Current ROM");
-    SetItemTranslatedString(hwnd,IDC_ROM_FULLPATH_TEXT,"Audit File Location");
-    SetItemTranslatedString(hwnd,IDC_AUDIT_START,"Start");
-    SetItemTranslatedString(hwnd,IDC_AUDIT_STOP,"Stop");
-    SetItemTranslatedString(hwnd,IDC_AUDIT_CLOSE,"Close");
-    TranslateDefault("Audit ROMs","Audit ROMs",tmp);
-    SetWindowText(hwnd,tmp);
-}
-
 void TranslateLangInfoDialog( HWND hwnd )
 {
     char tmp[200];

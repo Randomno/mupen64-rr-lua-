@@ -78,7 +78,13 @@
 #define IDC_HOTKEY_ASSIGN_SELECTED      1016
 #define IDC_SELECTED_HOTKEY_TEXT        1017
 #define IDC_HOTKEY_SEARCH               1018
+#define IDC_SPIN1                       1019
+#define IDC_SPIN_MODIFIER_SPIN          1019
 #define IDD_ABOUT                       1020
+#define IDC_SPEED_MODIFIER_EDIT         1020
+#define IDC_SLIDER1                     1021
+#define IDC_SPEED_MODIFIER_SLIDER       1021
+#define IDC_SPEED_MODIFIER_RESET        1022
 #define FULL_SCREEN                     1061
 #define EMU_PAUSE                       1062
 #define EMU_FRAMEADVANCE                1063
@@ -120,14 +126,6 @@
 #define ID_START_ROM                    2050
 #define ID_START_ROM_ENTER              2051
 #define ID_AUDIT_ROMS                   2100
-#define IDD_AUDIT_ROMS_DIALOG           2101
-#define IDC_AUDIT_STOP                  2102
-#define IDC_AUDIT_CLOSE                 2103
-#define IDC_AUDIT_START                 2104
-#define IDC_TOTAL_ROMS_TEXT             2105
-#define IDC_TOTAL_ROMS                  2106
-#define IDC_CURRENT_ROM_TEXT            2107
-#define IDC_CURRENT_ROM                 2108
 #define ID_GENERATE_ROM_INFO            2200
 #define IDD_MESSAGES                    2250
 #define IDC_SHOWFPS                     2251
@@ -200,8 +198,6 @@
 #define IDB_CONTROL                     4114
 #define IDB_DISPLAY                     4115
 #define ROM_POPUP_MENU                  4116
-#define IDC_CURRENT_ROM_PROGRESS        5001
-#define IDC_TOTAL_ROMS_PROGRESS         5002
 #define IDC_SAVES_DIR                   5004
 #define IDC_IDC_ROM_MD5                 5011
 #define IDC_CHOOSE_SAVES_DIR            5014
@@ -467,9 +463,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        106
+#define _APS_NEXT_RESOURCE_VALUE        107
 #define _APS_NEXT_COMMAND_VALUE         40008
-#define _APS_NEXT_CONTROL_VALUE         1019
+#define _APS_NEXT_CONTROL_VALUE         1024
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

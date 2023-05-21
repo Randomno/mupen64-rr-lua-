@@ -74,4 +74,5 @@ typedef struct _rom_settings
 } rom_settings;
 extern rom_settings ROM_SETTINGS;
 
+extern void audit_roms();
 #endif

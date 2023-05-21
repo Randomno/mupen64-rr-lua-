@@ -824,8 +824,6 @@ BOOL WmCommand(HWND wnd, WORD id, WORD code, HWND control){
 
 void CreateLuaWindow(void(*callback)()) {
 
-	if (LuaCriticalSettingChangePending)return;
-
 	if(!luaDC) {
 		InitializeLuaDC(mainHWND);
 	}

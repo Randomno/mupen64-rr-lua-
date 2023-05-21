@@ -153,11 +153,6 @@ display_loading_progress( int p )
 	while( g_main_iteration( FALSE ) );
 }
 
-void
-display_MD5calculating_progress( int p )
-{
-}
-
 static float VILimit = 60.0;
 static double VILimitMilliseconds = 1000.0/60.0;
 

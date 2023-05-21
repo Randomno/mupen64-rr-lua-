@@ -48,6 +48,7 @@
 #include "../main/win/Config.h"
 #include <win/rombrowser.h>
 #include <win/main_win.h>
+#include <win/inifunctions.h>
 
 static FILE *rom_file;
 static gzFile z_rom_file;
@@ -59,6 +60,7 @@ int taille_rom;
 unsigned char *rom;
 rom_header *ROM_HEADER;
 rom_settings ROM_SETTINGS;
+
 
 static int findsize()
 {
@@ -516,7 +518,6 @@ void calculateMD5(const char *argv, unsigned char digest[16])
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_MD5calculating_progress(tmp);
 	       }
 	  }
      }
@@ -527,7 +528,6 @@ void calculateMD5(const char *argv, unsigned char digest[16])
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_MD5calculating_progress(tmp);
 	       }
 	  }
      }
@@ -539,7 +539,6 @@ void calculateMD5(const char *argv, unsigned char digest[16])
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_MD5calculating_progress(tmp);
 	       }
 	  }
 	unzCloseCurrentFile(zip);
@@ -547,9 +546,7 @@ void calculateMD5(const char *argv, unsigned char digest[16])
    if (!z) fclose(rom_file);
    else if (z==1) gzclose(z_rom_file);
    else unzClose(zip);
-   
-   display_MD5calculating_progress(100);
-   
+      
    if (rom[0]==0x37)
      {
 	printf ("byteswaping rom...\n");
@@ -584,7 +581,29 @@ void calculateMD5(const char *argv, unsigned char digest[16])
    md5_init(&state);
    md5_append(&state, (const md5_byte_t *)rom, taille_rom);
    md5_finish(&state, digest);
-   display_MD5calculating_progress(-1);
    free(rom);
    rom = NULL;
+}
+
+
+void audit_roms() {
+	ROM_INFO* pRomInfo;
+	md5_byte_t digest[16];
+	char tempname[100];
+	for (int i = 0; i < ItemList.ListCount; i++)
+	{
+		pRomInfo = &ItemList.List[i];
+		sprintf(TempMessage, "%d", i + 1);
+
+		strcpy(TempMessage, pRomInfo->MD5);
+		if (!strcmp(TempMessage, "")) {
+			calculateMD5(pRomInfo->szFullFileName, digest);
+			MD5toString(digest, TempMessage);
+		}
+		strcpy(pRomInfo->MD5, TempMessage);
+		if (getIniGoodNameByMD5(TempMessage, tempname))
+			strcpy(pRomInfo->GoodName, tempname);
+		else
+			sprintf(pRomInfo->GoodName, "%s (not found in INI file)", pRomInfo->InternalName);
+	}
 }

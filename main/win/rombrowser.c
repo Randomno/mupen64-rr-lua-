@@ -629,12 +629,10 @@ LRESULT CALLBACK RomPropertiesProc(HWND hwnd, UINT Message, WPARAM wParam, LPARA
              WriteComboBoxValue( hwnd, IDC_COMBO_SOUND, TempRomSettings.SoundPluginName, sound_name);
              WriteComboBoxValue( hwnd, IDC_COMBO_RSP, TempRomSettings.RspPluginName, rsp_name);
              
-             if (Config.use_global_plugins) {
                  EnableWindow( GetDlgItem(hwnd,IDC_COMBO_GFX), FALSE );
                  EnableWindow( GetDlgItem(hwnd,IDC_COMBO_INPUT), FALSE );
                  EnableWindow( GetDlgItem(hwnd,IDC_COMBO_SOUND), FALSE );
                  EnableWindow( GetDlgItem(hwnd,IDC_COMBO_RSP), FALSE );         
-             }
              
              //Disables the button because of a bug in the emulator:
              //Sound gets distorted if you push the button while ingame

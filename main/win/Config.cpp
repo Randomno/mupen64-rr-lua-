@@ -496,7 +496,6 @@ CONFIG get_default_config()
 		.command = (ID_CURRENTSAVE_1 - 1) + 9,
 	};
 
-	config.validation_marker = 1;
 	config.language = "English";
 	config.show_fps = 1;
 	config.show_vis_per_second = 1;
@@ -504,22 +503,16 @@ CONFIG get_default_config()
 	config.is_savestate_warning_enabled = 1;
 	config.is_rom_movie_compatibility_check_enabled = 1;
 	config.is_fps_limited = 1;
-	config.is_ini_compressed = 0;
 	config.core_type = 1;
-	config.is_fps_modifier_enabled = 0;
 	config.fps_modifier = 100;
 	config.frame_skip_frequency = 1;
 	config.is_movie_loop_enabled = 0;
 	config.is_frame_count_visual_zero_index = 0;
 	config.is_movie_backup_enabled = 0;
-	config.movie_backup_level = 0;
 	config.cpu_clock_speed_multiplier = 1;
-	config.is_fullscreen_start_enabled = 0;
 	config.is_unfocused_pause_enabled = 0;
-	config.use_global_plugins = 1;
 	config.is_toolbar_enabled = 1;
 	config.is_statusbar_enabled = 1;
-	config.is_slot_autoincrement_enabled = 0;
 	config.is_state_independent_state_loading_allowed = 0;
 	config.is_good_name_column_enabled = 1;
 	config.is_internal_name_column_enabled = 0;
@@ -550,12 +543,8 @@ CONFIG get_default_config()
 	config.lua_script_path = "";
 	config.recent_lua_script_paths = std::vector<std::string>(10);
 	config.is_recent_scripts_frozen = 0;
-	config.is_lua_simple_dialog_enabled = 0;
-	config.is_lua_exit_confirm_enabled = 0;
-	config.is_statusbar_frequent_refresh_enabled = 0;
 	config.is_round_towards_zero_enabled = 0;
 	config.is_float_exception_propagation_enabled = 0;
-	config.is_input_delay_enabled = 0;
 	config.is_lua_double_buffered = 1;
 
 	return config;
@@ -678,22 +667,16 @@ mINI::INIStructure handle_config_ini(bool is_reading, mINI::INIStructure ini) {
 		HANDLE_INT_VALUE(is_savestate_warning_enabled)
 		HANDLE_INT_VALUE(is_rom_movie_compatibility_check_enabled)
 		HANDLE_INT_VALUE(is_fps_limited)
-		HANDLE_INT_VALUE(is_ini_compressed)
 		HANDLE_INT_VALUE(core_type)
-		HANDLE_INT_VALUE(is_fps_modifier_enabled)
 		HANDLE_INT_VALUE(fps_modifier)
 		HANDLE_INT_VALUE(frame_skip_frequency)
 		HANDLE_INT_VALUE(is_movie_loop_enabled)
 		HANDLE_INT_VALUE(is_frame_count_visual_zero_index)
 		HANDLE_INT_VALUE(is_movie_backup_enabled)
-		HANDLE_INT_VALUE(movie_backup_level)
 		HANDLE_INT_VALUE(cpu_clock_speed_multiplier)
-		HANDLE_INT_VALUE(is_fullscreen_start_enabled)
 		HANDLE_INT_VALUE(is_unfocused_pause_enabled)
-		HANDLE_INT_VALUE(use_global_plugins)
 		HANDLE_INT_VALUE(is_toolbar_enabled)
 		HANDLE_INT_VALUE(is_statusbar_enabled)
-		HANDLE_INT_VALUE(is_slot_autoincrement_enabled)
 		HANDLE_INT_VALUE(is_state_independent_state_loading_allowed)
 		HANDLE_INT_VALUE(is_good_name_column_enabled)
 		HANDLE_INT_VALUE(is_internal_name_column_enabled)
@@ -722,12 +705,8 @@ mINI::INIStructure handle_config_ini(bool is_reading, mINI::INIStructure ini) {
 		HANDLE_STRING_VALUE(lua_script_path)
 		HANDLE_STRING_VECTOR_VALUE(recent_lua_script_paths)
 		HANDLE_INT_VALUE(is_recent_scripts_frozen)
-		HANDLE_INT_VALUE(is_lua_simple_dialog_enabled)
-		HANDLE_INT_VALUE(is_lua_exit_confirm_enabled)
-		HANDLE_INT_VALUE(is_statusbar_frequent_refresh_enabled)
 		HANDLE_INT_VALUE(is_round_towards_zero_enabled)
 		HANDLE_INT_VALUE(is_float_exception_propagation_enabled)
-		HANDLE_INT_VALUE(is_input_delay_enabled)
 		HANDLE_INT_VALUE(is_lua_double_buffered)
 
 		return ini;

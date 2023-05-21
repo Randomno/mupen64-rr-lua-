@@ -75,11 +75,6 @@ typedef struct _CONFIG {
     t_hotkey select_slot_9_hotkey;
 
 #pragma endregion
-    
-    /// <summary>
-    /// Used for determining whether the config state is validated
-    /// </summary>
-    int32_t validation_marker;
 
     /// <summary>
     /// The selected language
@@ -119,12 +114,6 @@ typedef struct _CONFIG {
     int32_t is_fps_limited;
 
     /// <summary>
-    /// Whether the saved ini file 
-    /// TODO: Deprecate
-    /// </summary>
-    int32_t is_ini_compressed;
-
-    /// <summary>
     /// The currently selected core type
     /// <para/>
     /// 0 - Cached Interpreter
@@ -132,11 +121,6 @@ typedef struct _CONFIG {
     /// 2 - Pure Interpreter
     /// </summary>
     int32_t core_type;
-
-    /// <summary>
-    /// Whether the FPS modifier setting is respected
-    /// </summary>
-    int32_t is_fps_modifier_enabled;
 
     /// <summary>
     /// The target FPS modifier as a percentage 
@@ -164,15 +148,9 @@ typedef struct _CONFIG {
     int32_t is_frame_count_visual_zero_index;
 
     /// <summary>
-    /// Whether movie backups are enabled
+    /// Whether backups of the currently active movie will be created
     /// </summary>
     int32_t is_movie_backup_enabled;
-
-    /// <summary>
-    /// The frequency at which movie backups are created
-    /// TODO: Unify
-    /// </summary>
-    int32_t movie_backup_level;
 
     /// <summary>
     /// The emulated CPU's clock speed multiplier
@@ -183,21 +161,9 @@ typedef struct _CONFIG {
     int32_t cpu_clock_speed_multiplier;
 
     /// <summary>
-    /// Whether the game will start in full-screen mode
-    /// TODO: Deprecate, analyze usage
-    /// </summary>
-    int32_t is_fullscreen_start_enabled;
-
-    /// <summary>
     /// Whether emulation will pause when the main window loses focus
     /// </summary>
     int32_t is_unfocused_pause_enabled;
-
-    /// <summary>
-    /// Whether the plugins specified by the rom will be ignored, and the currently selected ones will be picked
-    /// TODO: Deprecate (this entire feature is extremely pointless and introduces extreme amounts of bloat)
-    /// </summary>
-    int32_t use_global_plugins;
 
     /// <summary>
     /// Whether the toolbar is enabled
@@ -208,12 +174,6 @@ typedef struct _CONFIG {
     /// Whether the statusbar is enabled
     /// </summary>
     int32_t is_statusbar_enabled;
-
-    /// <summary>
-    /// Whether the current savestate slot will increment (and wrap around) upon saving
-    /// TODO: Deprecate, analyze usage
-    /// </summary>
-    int32_t is_slot_autoincrement_enabled;
 
     /// <summary>
     /// Whether savestate loading will be allowed regardless of any incompatiblities
@@ -379,23 +339,6 @@ typedef struct _CONFIG {
     int32_t is_recent_scripts_frozen;
 
     /// <summary>
-    /// Whether the lua script dialog is simplified
-    /// TODO: Deprecate, analyze usage
-    /// </summary>
-    int32_t is_lua_simple_dialog_enabled;
-
-    /// <summary>
-    /// Whether the lua script dialog will ask for confirmation before closing
-    /// TODO: Deprecate, analyze usage
-    /// </summary>
-    int32_t is_lua_exit_confirm_enabled;
-
-    /// <summary>
-    /// Whether the statusbar will refresh every frame
-    /// </summary>
-    int32_t is_statusbar_frequent_refresh_enabled;
-
-    /// <summary>
     /// Whether floats will be truncated when rounding
     /// </summary>
     int32_t is_round_towards_zero_enabled;
@@ -404,12 +347,6 @@ typedef struct _CONFIG {
     /// Whether floating point exceptions will propagate and crash the emulator
     /// </summary>
     int32_t is_float_exception_propagation_enabled;
-
-    /// <summary>
-    /// Whether the input will be delayed by 1f
-    /// TODO: Obsolete, remove (not implemented)
-    /// </summary>
-    int32_t is_input_delay_enabled;
 
     /// <summary>
     /// Whether lua drawing is double-buffered

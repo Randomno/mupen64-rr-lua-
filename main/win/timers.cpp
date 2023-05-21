@@ -70,17 +70,10 @@ int GetVILimit()
 }
 
 void InitTimer() {
-   int temp;
    VILimit = GetVILimit();
-   if (Config.is_fps_modifier_enabled) {
-       temp = Config.fps_modifier ; 
-      }  
-   else {
-       temp = 100;
-   }    
-   VILimitMilliseconds = std::chrono::duration<double, std::milli>(1000.0 / (VILimit * temp / 100));
+   VILimitMilliseconds = std::chrono::duration<double, std::milli>(1000.0 / (VILimit * Config.fps_modifier / 100));
    Translate( "Speed Limit", TempMessage );
-   sprintf(TempMessage,"%s: %d%%", TempMessage, temp);
+   sprintf(TempMessage,"%s: %d%%", TempMessage, Config.fps_modifier);
    SendMessage( hStatus, SB_SETTEXT, 0, (LPARAM)TempMessage );    
 }
 
@@ -169,13 +162,7 @@ void new_vi()
 #else
 	extern int frame_advancing;
 	extern BOOL manualFPSLimit;
-	if (!Config.is_statusbar_frequent_refresh_enabled) {
-		if ((frame_advancing || (m_currentVI % (manualFPSLimit ? 10 : 80)) == 0))
-		{
-			VCR_updateFrameCounter();
-		}
-	}else
-		VCR_updateFrameCounter();
+	VCR_updateFrameCounter();
 
 	if(VCR_isPlaying())
 	{

@@ -86,11 +86,8 @@ BOOL CALLBACK OtherOptionsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lP
 	switch (Message)
 	{
 	case WM_INITDIALOG: {
-		WriteCheckBoxValue(hwnd, IDC_LUA_SIMPLEDIALOG, Config.is_lua_simple_dialog_enabled);
-		WriteCheckBoxValue(hwnd, IDC_LUA_WARNONCLOSE, Config.is_lua_exit_confirm_enabled);
 		WriteCheckBoxValue(hwnd, IDC_MOVIEBACKUPS, Config.is_movie_backup_enabled);
 		WriteCheckBoxValue(hwnd, IDC_ALERTMOVIESERRORS, Config.is_rom_movie_compatibility_check_enabled);
-		WriteCheckBoxValue(hwnd, IDC_FREQUENTVCRREFRESH, Config.is_statusbar_frequent_refresh_enabled);
 
 		static const char* clockSpeedMultiplierNames[] = { "1 - Legacy Mupen Lag Emulation", "2 - 'Lagless'", "3", "4", "5", "6" };
 
@@ -138,16 +135,6 @@ BOOL CALLBACK OtherOptionsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lP
 			if (!VCR_isCapturing())
 				Config.synchronization_mode = VCR_SYNC_NONE;
 			break;
-		case IDC_LUA_SIMPLEDIALOG: {
-
-			if (MessageBox(0, "Changing this option requires a restart.\nPress Yes to confirm that you want to change this setting. (You won\'t be able to use lua until a restart)\nPress No to revert changes.", "Restart required", MB_TOPMOST | MB_TASKMODAL | MB_ICONWARNING | MB_YESNO) == IDYES) {
-				LuaCriticalSettingChangePending = 1;
-				CloseAllLuaScript();
-			}
-			else
-				CheckDlgButton(hwnd, IDC_LUA_SIMPLEDIALOG, Config.is_lua_simple_dialog_enabled);
-
-			break;
 		}
 		case IDC_COMBO_CLOCK_SPD_MULT:
 			ReadComboBoxValue(hwnd, IDC_COMBO_CLOCK_SPD_MULT, buf);
@@ -158,7 +145,7 @@ BOOL CALLBACK OtherOptionsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lP
 		}
 
 		break;
-	}
+	
 
 	case WM_NOTIFY:
 	{
@@ -167,12 +154,8 @@ BOOL CALLBACK OtherOptionsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lP
 		}
 
 		if (((NMHDR FAR*) lParam)->code == PSN_APPLY) {
-			Config.is_lua_simple_dialog_enabled = ReadCheckBoxValue(hwnd, IDC_LUA_SIMPLEDIALOG);
-			Config.is_lua_exit_confirm_enabled = ReadCheckBoxValue(hwnd, IDC_LUA_WARNONCLOSE);
 			Config.is_movie_backup_enabled = ReadCheckBoxValue(hwnd, IDC_MOVIEBACKUPS);
 			Config.is_rom_movie_compatibility_check_enabled = ReadCheckBoxValue(hwnd, IDC_ALERTMOVIESERRORS);
-			Config.is_statusbar_frequent_refresh_enabled = ReadCheckBoxValue(hwnd, IDC_FREQUENTVCRREFRESH);
-			Config.movie_backup_level = SendMessage(hwndTrackMovieBackup, TBM_GETPOS, 0, 0);
 			EnableToolbar();
 			EnableStatusbar();
 			FastRefreshBrowser();
@@ -795,7 +778,6 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		WriteCheckBoxValue(hwnd, IDC_MANAGEBADROM, Config.prevent_suspicious_rom_loading);
 		WriteCheckBoxValue(hwnd, IDC_ALERTSAVESTATEWARNINGS, Config.is_savestate_warning_enabled);
 		WriteCheckBoxValue(hwnd, IDC_LIMITFPS, Config.is_fps_limited);
-		WriteCheckBoxValue(hwnd, IDC_SPEEDMODIFIER, Config.is_fps_modifier_enabled);
 		WriteCheckBoxValue(hwnd, IDC_0INDEX, Config.is_frame_count_visual_zero_index);
 		SendMessage(GetDlgItem(hwnd, IDC_FPSTRACKBAR), TBM_SETPOS, TRUE, Config.fps_modifier);
 		SetDlgItemInt(hwnd, IDC_SKIPFREQ, Config.frame_skip_frequency, 0);
@@ -868,7 +850,6 @@ BOOL CALLBACK GeneralCfg(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			Config.is_savestate_warning_enabled = ReadCheckBoxValue(hwnd, IDC_ALERTSAVESTATEWARNINGS);
 			Config.is_fps_limited = ReadCheckBoxValue(hwnd, IDC_LIMITFPS);
 			Config.fps_modifier = SendMessage(GetDlgItem(hwnd, IDC_FPSTRACKBAR), TBM_GETPOS, 0, 0);
-			Config.is_fps_modifier_enabled = ReadCheckBoxValue(hwnd, IDC_SPEEDMODIFIER);
 			Config.frame_skip_frequency = GetDlgItemInt(hwnd, IDC_SKIPFREQ, 0, 0);
 			Config.is_frame_count_visual_zero_index = ReadCheckBoxValue(hwnd, IDC_0INDEX);
 			Config.is_state_independent_state_loading_allowed = ReadCheckBoxValue(hwnd, IDC_ALLOW_ARBITRARY_SAVESTATE_LOADING);
@@ -996,16 +977,11 @@ BOOL CALLBACK AdvancedSettingsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARA
 	switch (Message) {
 
 	case WM_INITDIALOG:
-		WriteCheckBoxValue(hwnd, IDC_STARTFULLSCREEN, Config.is_fullscreen_start_enabled);
 		WriteCheckBoxValue(hwnd, IDC_PAUSENOTACTIVE, Config.is_unfocused_pause_enabled);
-		WriteCheckBoxValue(hwnd, IDC_PLUGIN_OVERWRITE, Config.use_global_plugins);
 		WriteCheckBoxValue(hwnd, IDC_GUI_TOOLBAR, Config.is_toolbar_enabled);
 		WriteCheckBoxValue(hwnd, IDC_GUI_STATUSBAR, Config.is_statusbar_enabled);
-		WriteCheckBoxValue(hwnd, IDC_AUTOINCSAVESLOT, Config.is_slot_autoincrement_enabled);
 		WriteCheckBoxValue(hwnd, IDC_ROUNDTOZERO, Config.is_round_towards_zero_enabled);
 		WriteCheckBoxValue(hwnd, IDC_EMULATEFLOATCRASHES, Config.is_float_exception_propagation_enabled);
-		WriteCheckBoxValue(hwnd, IDC_INPUTDELAY, Config.is_input_delay_enabled);
-		EnableWindow(GetDlgItem(hwnd, IDC_INPUTDELAY), false); //disable for now
 		WriteCheckBoxValue(hwnd, IDC_CLUADOUBLEBUFFER, Config.is_lua_double_buffered);
 		WriteCheckBoxValue(hwnd, IDC_NO_AUDIO_DELAY, no_audio_delay);
 		WriteCheckBoxValue(hwnd, IDC_NO_COMPILED_JUMP, no_compiled_jump);
@@ -1029,15 +1005,11 @@ BOOL CALLBACK AdvancedSettingsProc(HWND hwnd, UINT Message, WPARAM wParam, LPARA
 
 	case WM_NOTIFY:
 		if (((NMHDR FAR*) lParam)->code == PSN_APPLY) {
-			Config.is_fullscreen_start_enabled = ReadCheckBoxValue(hwnd, IDC_STARTFULLSCREEN);
 			Config.is_unfocused_pause_enabled = ReadCheckBoxValue(hwnd, IDC_PAUSENOTACTIVE);
-			Config.use_global_plugins = ReadCheckBoxValue(hwnd, IDC_PLUGIN_OVERWRITE);
 			Config.is_toolbar_enabled = ReadCheckBoxValue(hwnd, IDC_GUI_TOOLBAR);
 			Config.is_statusbar_enabled = ReadCheckBoxValue(hwnd, IDC_GUI_STATUSBAR);
-			Config.is_slot_autoincrement_enabled = ReadCheckBoxValue(hwnd, IDC_AUTOINCSAVESLOT);
 			Config.is_round_towards_zero_enabled = ReadCheckBoxValue(hwnd, IDC_ROUNDTOZERO);
 			Config.is_float_exception_propagation_enabled = ReadCheckBoxValue(hwnd, IDC_EMULATEFLOATCRASHES);
-			Config.is_input_delay_enabled = ReadCheckBoxValue(hwnd, IDC_INPUTDELAY);
 
 			Config.is_lua_double_buffered = ReadCheckBoxValue(hwnd, IDC_CLUADOUBLEBUFFER);
 			no_audio_delay = ReadCheckBoxValue(hwnd, IDC_NO_AUDIO_DELAY);

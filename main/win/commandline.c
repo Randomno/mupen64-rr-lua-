@@ -92,12 +92,6 @@ void GetCmdLineParameter(CmdLineParameterType arg, char *buf)
 		return;
 	}
 	
-	if( arg == CMDLINE_FULL_SCREEN_FLAG )
-	{
-		strcpy(buf, "1");
-		return;
-	}
-	
 	if ( arg == CMDLINE_NO_GUI )
 	{
 		strcpy(buf, "1");
@@ -164,13 +158,6 @@ BOOL StartGameByCommandLine()
 	}
 	
 	cmdlineMode = 1;
-		
-	/// Reading command line params
-	if( CmdLineParameterExist(CMDLINE_FULL_SCREEN_FLAG))
-	{
-		ShowInfo("Command Line: Fullscreen mode on");
-		Config.is_fullscreen_start_enabled = 1;
-	}
 	
 	if( CmdLineParameterExist(CMDLINE_SAVE_OPTIONS) )
 	{

@@ -218,16 +218,11 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     GROUPBOX        "Common Options",IDC_COMMON,6,6,216,60
-    CONTROL         "Start game in full screen",IDC_STARTFULLSCREEN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,18,114,8
-    CONTROL         "1f Input Delay",IDC_INPUTDELAY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,132,96,8
     CONTROL         "LUA Double Buffer",IDC_CLUADOUBLEBUFFER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,120,96,8
     CONTROL         "Pause emulation when window is not active",IDC_PAUSENOTACTIVE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,42,114,8
-    CONTROL         "Use global plugins settings",IDC_PLUGIN_OVERWRITE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,30,114,8
     CONTROL         "Show toolbar",IDC_GUI_TOOLBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,138,18,76,8
     CONTROL         "Show statusbar",IDC_GUI_STATUSBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,138,30,76,10
-    CONTROL         "Auto-increment slot",IDC_AUTOINCSAVESLOT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,54,114,8
     GROUPBOX        "Compatibility Options",IDC_COMPATIBILITY,7,71,215,73
     CONTROL         "No audio delay",IDC_NO_AUDIO_DELAY,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,12,84,96,10
     CONTROL         "No compiled jump",IDC_NO_COMPILED_JUMP,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,12,96,96,8
@@ -251,8 +246,6 @@ STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     GROUPBOX        "",IDC_OTHEROPTIONS,6,6,210,126
-    CONTROL         "Ask on lua close",IDC_LUA_WARNONCLOSE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,18,132,8
-    CONTROL         "Simplified lua dialog",IDC_LUA_SIMPLEDIALOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,30,132,10
     CONTROL         "Automatic movie backups",IDC_MOVIEBACKUPS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,42,132,10
     CONTROL         "Frequent statusbar updates",IDC_FREQUENTVCRREFRESH,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,54,132,8

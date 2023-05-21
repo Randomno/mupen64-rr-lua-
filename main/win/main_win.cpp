@@ -834,7 +834,7 @@ int check_plugins()
 		}
 		if (MessageBox(mainHWND, (finalMessage + "\nDo you want to select plugins?").c_str(), "Error", MB_TASKMODAL | MB_ICONERROR | MB_YESNO) == IDYES) {
 			ChangeSettings(mainHWND);
-			ini_updateFile(Config.is_ini_compressed);
+			ini_updateFile();
 		}
 
 		return FALSE;
@@ -1157,31 +1157,12 @@ int load_plugins()
 	DEFAULT_ROM_SETTINGS TempRomSettings;
 
 	TempRomSettings = GetDefaultRomSettings((char*)ROM_HEADER->nom);
-	if (!Config.use_global_plugins)
-	{
-		handle_gfx = get_handle(liste_plugins, TempRomSettings.GfxPluginName);
-		if (handle_gfx == NULL) { handle_gfx = get_handle(liste_plugins, gfx_name); }
-		else { sprintf(gfx_name, TempRomSettings.GfxPluginName); }
 
-		handle_input = get_handle(liste_plugins, TempRomSettings.InputPluginName);
-		if (handle_input == NULL) handle_input = get_handle(liste_plugins, input_name);
-		else { sprintf(input_name, TempRomSettings.InputPluginName); }
+	handle_gfx = get_handle(liste_plugins, gfx_name);
+	handle_input = get_handle(liste_plugins, input_name);
+	handle_sound = get_handle(liste_plugins, sound_name);
+	handle_rsp = get_handle(liste_plugins, rsp_name);
 
-		handle_sound = get_handle(liste_plugins, TempRomSettings.SoundPluginName);
-		if (handle_sound == NULL) handle_sound = get_handle(liste_plugins, sound_name);
-		else { sprintf(sound_name, TempRomSettings.SoundPluginName); }
-
-		handle_rsp = get_handle(liste_plugins, TempRomSettings.RspPluginName);
-		if (handle_rsp == NULL) handle_rsp = get_handle(liste_plugins, rsp_name);
-		else { sprintf(rsp_name, TempRomSettings.RspPluginName); }
-	}
-	else
-	{
-		handle_gfx = get_handle(liste_plugins, gfx_name);
-		handle_input = get_handle(liste_plugins, input_name);
-		handle_sound = get_handle(liste_plugins, sound_name);
-		handle_rsp = get_handle(liste_plugins, rsp_name);
-	}
 	ThreadFuncState = TFS_LOADGFX;
 	ShowInfo("Loading gfx -  %s", gfx_name);
 	load_gfx(handle_gfx);
@@ -2525,10 +2506,6 @@ static DWORD WINAPI ThreadFunc(LPVOID lpParam)
 	emu_launched = 1;
 	restart_mode = 0;
 
-	if (Config.is_fullscreen_start_enabled) {
-		FullScreenMode = 1;
-		gui_ChangeWindow();
-	}
 	ThreadFuncState = TFS_CREATESOUND;
 	ShowInfo("Emu thread: Creating sound thread...");
 	SoundThreadHandle = CreateThread(NULL, 0, SoundThread, NULL, 0, &SOUNDTHREADID);
@@ -2583,7 +2560,7 @@ void exit_emu(int postquit)
 
 	if (postquit) {
 		if (!cmdlineMode || cmdlineSave) {
-			ini_updateFile(Config.is_ini_compressed);
+			ini_updateFile();
 			if (!cmdlineNoGui)
 				SaveRomBrowserCache();
 		}
@@ -2609,7 +2586,7 @@ void exit_emu2()
 		return;
 
 	if ((!cmdlineMode) || (cmdlineSave)) {
-		ini_updateFile(Config.is_ini_compressed);
+		ini_updateFile();
 		save_config();
 		if (!cmdlineNoGui) {
 			SaveRomBrowserCache();
@@ -3040,7 +3017,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 #endif
 		} break;
 		case ID_FORCESAVE:
-			ini_updateFile(Config.is_ini_compressed);
+			ini_updateFile();
 			SaveRomBrowserCache();
 			save_config();
 			ini_closeFile();
@@ -3228,7 +3205,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				pauseEmu(FALSE);
 			}
 			ChangeSettings(hwnd);
-			ini_updateFile(Config.is_ini_compressed);
+			ini_updateFile();
 			if (emu_launched && emu_paused && !wasPaused) {
 				resumeEmu(FALSE);
 			}
@@ -3509,7 +3486,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				char rec_buffer[MAX_PATH];
 
 				// The default directory we open the file dialog window in is
-			    // the parent directory of the last avi that the user captured
+				// the parent directory of the last avi that the user captured
 				char default_file_dialog_path[MAX_PATH];
 				GetDefaultFileDialogPath(path_buffer, default_file_dialog_path);
 				Config.avi_capture_path = std::string(default_file_dialog_path);
@@ -4009,7 +3986,7 @@ int WINAPI WinMain(
 			}
 
 			static t_hotkey* last_pressed_hotkey = 0;
-			
+
 			// modifier-only checks, cannot be obtained through windows messaging...
 			int i;
 			for (i = 0; i < hotkeys.size(); i++)

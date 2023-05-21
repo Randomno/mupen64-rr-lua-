@@ -679,7 +679,6 @@ void SizingControl(HWND wnd, RECT *p, int x, int y, int w, int h) {
 		p->right-p->left+w, p->bottom-p->top+h, SWP_NOZORDER);
 }
 void SizingControls(HWND wnd, WORD width, WORD height) {
-	if (Config.is_lua_simple_dialog_enabled)return;
 	int xa = width - (InitalWindowRect[0].right - InitalWindowRect[0].left),
 		ya = height - (InitalWindowRect[0].bottom - InitalWindowRect[0].top);
 	SizingControl(GetDlgItem(wnd, IDC_TEXTBOX_LUASCRIPTPATH),
@@ -714,11 +713,6 @@ INT_PTR CALLBACK DialogProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		return TRUE;
 	}
 	case WM_CLOSE:
-
-		if (Config.is_lua_exit_confirm_enabled
-			&& (MessageBox(0, "Are you sure you want to close this dialog and terminate this lua script instance?", "Confirm closing", MB_TASKMODAL | MB_TOPMOST | MB_YESNO | MB_ICONQUESTION) == IDNO))
-			return TRUE;
-
 		DestroyWindow(wnd);
 		return TRUE;
 	case WM_DESTROY:{
@@ -785,10 +779,6 @@ BOOL WmCommand(HWND wnd, WORD id, WORD code, HWND control){
 
 		GetWindowText(GetDlgItem(wnd, IDC_TEXTBOX_LUASCRIPTPATH),
 		msg->runPath.path, MAX_PATH);
-		//strcpy(Config.lua_script_path, msg->runPath.path);
-
-		if (Config.is_lua_simple_dialog_enabled)
-			SetWindowText(wnd, msg->runPath.path);
 
 		anyLuaRunning = true;
 		luaMessage.post(msg);
@@ -840,10 +830,8 @@ void CreateLuaWindow(void(*callback)()) {
 		InitializeLuaDC(mainHWND);
 	}
 
-	int LuaWndId = Config.is_lua_simple_dialog_enabled ? IDD_LUAWINDOW_SIMPLIFIED : IDD_LUAWINDOW;
-
 	HWND wnd = CreateDialogParam(app_hInstance,
-		MAKEINTRESOURCE(LuaWndId), mainHWND, DialogProc,
+		MAKEINTRESOURCE(IDD_LUAWINDOW), mainHWND, DialogProc,
 		(LPARAM)callback);
 
 	ShowWindow(wnd, SW_SHOW);	//�^�u�X�g�b�v�����Ȃ��̂Ɠ����������Ǝv��

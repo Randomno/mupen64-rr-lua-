@@ -227,43 +227,21 @@ void ini_closeFile()
 	 }
 }
 
-void ini_updateFile(int compress)
+void ini_updateFile()
 {
    gzFile zf = NULL;
    FILE *f = NULL;
    iniElem *aux;
    
    if (ini.comment == NULL) return ;
-   
-   if (compress) 
-     {
-	zf = gzopen(get_ini_path(), "wb");
-	gzprintf(zf, "%s", ini.comment);
-     }
-   else
-     {
-	f = fopen(get_ini_path(), "wb");
-	fprintf(f, "%s", ini.comment);
-     }
-   
+
+   f = fopen(get_ini_path(), "wb");
+   fprintf(f, "%s", ini.comment);
+
    aux = ini.list;
    while (aux != NULL)
      {
-	if (compress) 
-	  {
-	     gzprintf(zf, "[%s]\n", aux->entry.MD5);
-	     gzprintf(zf, "Good Name=%s\n", aux->entry.goodname);
-	     gzprintf(zf, "Header Code=%s\n", aux->entry.CRC);
-	     if (strcmp(aux->entry.refMD5, ""))
-	       gzprintf(zf, "Reference=%s\n", aux->entry.refMD5);
-	     if (aux->entry.eeprom16kb == 1)
-	       gzprintf(zf, "Eeprom=16k\n");
-	     if (strcmp(aux->entry.comments, ""))
-	       gzprintf(zf, "Comments=%s\n", aux->entry.comments);
-	     gzprintf(zf, "\n");
-	  }
-	else
-	  {
+	
 	     fprintf(f, "[%s]\n", aux->entry.MD5);
 	     fprintf(f, "Good Name=%s\n", aux->entry.goodname);
 	     fprintf(f, "Header Code=%s\n", aux->entry.CRC);
@@ -274,13 +252,13 @@ void ini_updateFile(int compress)
 	     if (strcmp(aux->entry.comments, ""))
 	       fprintf(f, "Comments=%s\n", aux->entry.comments);
 	     fprintf(f, "\n");
+		 aux = aux->next_entry;
 	  }
 	
-	aux = aux->next_entry;
-     }
+	
+     
    
-   if (compress) gzclose(zf);
-   else fclose(f);
+   fclose(f);
 }
 
 mupenEntry* ini_search_by_md5(const char *md5)

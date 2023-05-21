@@ -244,11 +244,10 @@
     </ClInclude>
     <ClInclude Include="..\..\main\win\CrashHandlerDialog.h" />
     <ClInclude Include="..\..\main\win\CrashHelper.h" />
-    <ClInclude Include="string_helpers.h">
-      <Filter>Source Files\main\helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="numeric_helpers.h">
-      <Filter>Source Files\main\helpers</Filter>
+    <ClInclude Include="..\..\main\helpers\numeric_helpers.h" />
+    <ClInclude Include="..\..\main\helpers\string_helpers.h" />
+    <ClInclude Include="..\..\main\ini.h">
+      <Filter>Source Files\main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -300,7 +299,7 @@
     <ClCompile Include="..\..\main\win\commandline.c">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main\win\Config.c">
+    <ClCompile Include="..\..\main\win\Config.cpp">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\win\configdialog.c">
@@ -333,7 +332,7 @@
     <ClCompile Include="..\..\main\win\timers.cpp">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main\win\translation.c">
+    <ClCompile Include="..\..\main\win\translation.cpp">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\gui_gtk\aboutdialog.c">

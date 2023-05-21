@@ -109,7 +109,6 @@ extern HANDLE romBrowserRefreshThread;
 extern int romBrowserBusy;
 
 #define ROM_COLUMN_FIELDS 7
-#define MAX_RECENT_ROMS 10
 void SetRealColumnArray();
 extern int RealColumn[ROM_COLUMN_FIELDS] ;
 

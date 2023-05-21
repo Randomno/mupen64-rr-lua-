@@ -239,10 +239,10 @@ void buildRomList() {
     char *pszKailleraNamedRoms = szKailleraNamedRoms;
     *pszKailleraNamedRoms = '\0';
     
-    sprintf( sort_method, Config.rom_browser_sort_method) ;
+    sprintf(sort_method, Config.rom_browser_sort_method.c_str()) ;
     sort_column = Config.rom_browser_sorted_column ;
     
-    sprintf(Config.rom_browser_sort_method,"ASC");
+    Config.rom_browser_sort_method = "ASC";
     Config.rom_browser_sorted_column = 0 ;
     ListViewSort() ;
     
@@ -260,7 +260,7 @@ void buildRomList() {
         
     *(++pszKailleraNamedRoms) = '\0';
     
-    sprintf( Config.rom_browser_sort_method, sort_method ) ;
+    Config.rom_browser_sort_method = std::string(sort_method);
     Config.rom_browser_sorted_column = sort_column ;
     ListViewSort() ;
 }

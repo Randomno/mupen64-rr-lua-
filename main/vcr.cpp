@@ -628,7 +628,7 @@ SMovieHeader VCR_getHeaderInfo(const char* filename)
 void VCR_clearAllSaveData ()
 {
     int i;
-	extern char *get_savespath(); // defined in either win\guifuncs.c or gui_gtk/main_gtk.c
+	extern const char *get_savespath(); // defined in either win\guifuncs.c or gui_gtk/main_gtk.c
 	
 	// clear SRAM
     {
@@ -1628,35 +1628,22 @@ startPlayback( const char *filename, const char *authorUTF8, const char *descrip
 			extern char input_name[255];
 			extern char sound_name[255];
 			extern char rsp_name[255];
-			//			    ROM_INFO* pRomInfo = getSelectedRom(); // FIXME
-			//			    DEFAULT_ROM_SETTINGS TempRomSettings = GetDefaultRomSettings( pRomInfo->InternalName);
-			//				if(TempRomSettings.InputPluginName[0])
-			//					strncpy(name, TempRomSettings.InputPluginName, 64);
-			//				else
+
 			strncpy(name, input_name, 64);
 			if (name[0] && m_header.inputPluginName[0] && _stricmp(m_header.inputPluginName, name) != 0)
 			{
 				printf("Warning: The movie was recorded with the input plugin \"%s\",\nbut you are using the input plugin \"%s\",\nso the movie may not play properly.\n", m_header.inputPluginName, name);
 			}
-			//				if(TempRomSettings.GfxPluginName[0])
-			//					strncpy(name, TempRomSettings.GfxPluginName, 64);
-			//				else
 			strncpy(name, gfx_name, 64);
 			if (name[0] && m_header.videoPluginName[0] && _stricmp(m_header.videoPluginName, name) != 0)
 			{
 				printf("Warning: The movie was recorded with the graphics plugin \"%s\",\nbut you are using the graphics plugin \"%s\",\nso the movie might not play properly.\n", m_header.videoPluginName, name);
 			}
-			//				if(TempRomSettings.SoundPluginName[0])
-			//					strncpy(name, TempRomSettings.SoundPluginName, 64);
-			//				else
 			strncpy(name, sound_name, 64);
 			if (name[0] && m_header.soundPluginName[0] && _stricmp(m_header.soundPluginName, name) != 0)
 			{
 				printf("Warning: The movie was recorded with the sound plugin \"%s\",\nbut you are using the sound plugin \"%s\",\nso the movie might not play properly.\n", m_header.soundPluginName, name);
 			}
-			//				if(TempRomSettings.RspPluginName[0])
-			//					strncpy(name, TempRomSettings.RspPluginName, 64);
-			//				else
 			strncpy(name, rsp_name, 64);
 			if (name[0] && m_header.rspPluginName[0] && _stricmp(m_header.rspPluginName, name) != 0)
 			{
@@ -1671,11 +1658,6 @@ startPlayback( const char *filename, const char *authorUTF8, const char *descrip
 						fclose(m_file);
 				return VCR_PLAYBACK_INCOMPATIBLE;
 			}
-
-			// recalculate length of movie from the file size
-//				fseek(m_file, 0, SEEK_END);
-//				int fileSize = ftell(m_file);
-//				m_header.length_samples = (fileSize - MUP_HEADER_SIZE) / sizeof(BUTTONS) - 1;
 
 			fseek(m_file, MUP_HEADER_SIZE_CUR, SEEK_SET);
 
@@ -2289,8 +2271,7 @@ int VCR_startCapture(const char* recFilename, const char* aviFilename, bool code
 	captureWithFFmpeg = 0;
 	EnableEmulationMenuItems(TRUE);
 	strncpy( AVIFileName, aviFilename, PATH_MAX );
-	strncpy(Config.avi_capture_path, aviFilename, PATH_MAX);
-
+	Config.avi_capture_path = std::string(aviFilename);
 	UpdateTitleBarCapture(AVIFileName);
 /*	if (VCR_startPlayback( recFilename ) < 0)
 	{
@@ -2589,8 +2570,6 @@ void VCR_updateFrameCounter ()
 /////////////////////////// Recent Movies //////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-bool emptyRecentMovies = false;
-
 // Adapted Code from Recent.cpp
 void BuildRecentMoviesMenu(HWND hwnd) {
 	int i;
@@ -2605,25 +2584,13 @@ void BuildRecentMoviesMenu(HWND hwnd) {
 	menuinfo.fType = MFT_STRING;
 	menuinfo.fState = MFS_ENABLED;
 
-	for (i = 0; i < MAX_RECENT_MOVIE; i++) {
-		if (strcmp(Config.recent_movie_paths[i], "") == 0) {
-			// the !emptyRecentMovies check here prevents unlimited "No Recent Movies" items being added to the menu by repeatedly pressing Reset
-			if (i == 0 && !emptyRecentMovies) {
-				menuinfo.dwTypeData = (LPTSTR)"No Recent Movies";
-				emptyRecentMovies = true;
-			}
-			else break;
-		}
-		else {
-			menuinfo.dwTypeData = Config.recent_movie_paths[i];
-			emptyRecentMovies = false;
-		}
-
+	for (i = 0; i < Config.recent_movie_paths.size(); i++) {
+		menuinfo.dwTypeData = (LPSTR)Config.recent_movie_paths[i].c_str();
 		menuinfo.cch = strlen(menuinfo.dwTypeData);
 		menuinfo.wID = ID_RECENTMOVIES_FIRST + i;
 		InsertMenuItem(hSubMenu, i + 3, TRUE, &menuinfo);
 
-		if (emptyRecentMovies || IsMenuItemEnabled(hMenu, REFRESH_ROM_BROWSER)) {
+		if (IsMenuItemEnabled(hMenu, REFRESH_ROM_BROWSER)) {
 			EnableMenuItem(hSubMenu, ID_RECENTMOVIES_FIRST + i, MF_DISABLED);
 			EnableMenuItem(hMovieMenu, ID_REPLAY_LATEST, MF_DISABLED);
 		}
@@ -2631,12 +2598,10 @@ void BuildRecentMoviesMenu(HWND hwnd) {
 }
 
 void EnableRecentMoviesMenu(HMENU hMenu, BOOL flag) {
-	if (!emptyRecentMovies) {
-		for (int i = 0; i < MAX_RECENT_MOVIE; i++) {
-			EnableMenuItem(hMenu, ID_RECENTMOVIES_FIRST + i, flag ? MF_ENABLED : MF_DISABLED);
-		}
-		EnableMenuItem(hMenu, ID_REPLAY_LATEST, flag ? MF_ENABLED : MF_DISABLED);
+	for (int i = 0; i < Config.recent_movie_paths.size(); i++) {
+		EnableMenuItem(hMenu, ID_RECENTMOVIES_FIRST + i, flag ? MF_ENABLED : MF_DISABLED);
 	}
+	EnableMenuItem(hMenu, ID_REPLAY_LATEST, flag ? MF_ENABLED : MF_DISABLED);
 }
 
 // Adapted Code from Recent.cpp
@@ -2644,14 +2609,11 @@ void ClearRecentMovies(BOOL clear_array) {
 	int i;
 	HMENU hMenu = GetMenu(mainHWND);
 
-	for (i = 0; i < MAX_RECENT_MOVIE; i++) {
+	for (i = 0; i < Config.recent_movie_paths.size(); i++) {
 		DeleteMenu(hMenu, ID_RECENTMOVIES_FIRST + i, MF_BYCOMMAND);
 	}
 	if (clear_array) {
-		memset(Config.recent_movie_paths, 0, MAX_RECENT_MOVIE * sizeof(Config.recent_movie_paths[0]));
-		/* unintuitive, but if emptyRecentMovies is true then the "if (i == 0 && !emptyRecentMovies)" check will fail in BuildRecentMoviesMenu,
-		meaning "No Recent Movies" will never be added to the list */
-		emptyRecentMovies = false;
+		Config.recent_movie_paths.clear();
 	}
 }
 
@@ -2668,18 +2630,18 @@ void AddToRecentMovies(const char* path) {
 	int i = 0;
 	//Either finds index of path in recent list, or stops at last one
 	//notice how it doesn't matter if last==path or not, we do same swapping later
-	for (; i < MAX_RECENT_MOVIE - 1; ++i)
+	for (; i < Config.recent_movie_paths.size() - 1; ++i)
 	{
 		//if matches or empty (list is not full), break
-		if (Config.recent_movie_paths[i][0] == 0 || !strcmp(Config.recent_movie_paths[i], path)) break;
+		if (Config.recent_movie_paths[i][0] == 0 || Config.recent_movie_paths[i] == path) break;
 	}
 	//now swap all elements backwards starting from `i`
 	for (int j = i; j > 0; --j)
 	{
-		strcpy(Config.recent_movie_paths[j], Config.recent_movie_paths[j - 1]);
+		Config.recent_movie_paths[j] = Config.recent_movie_paths[j - 1];
 	}
 	//now write to top
-	strcpy(Config.recent_movie_paths[0], path);
+	Config.recent_movie_paths[0] = path;
 	//rebuild menu
 	RefreshRecentMovies();
 }
@@ -2698,7 +2660,7 @@ void FreezeRecentMovies(HWND hWnd, BOOL ChangeConfigVariable) {
 int RunRecentMovie(WORD menuItem) {
 	char path[MAX_PATH];
 	int index = menuItem - ID_RECENTMOVIES_FIRST;
-	sprintf(path, Config.recent_movie_paths[index]);
+	Config.recent_movie_paths[index].copy(path, MAX_PATH);
 	VCR_setReadOnly(TRUE);
 	return VCR_startPlayback(path, "", "");
 }

@@ -770,7 +770,7 @@ void ResetRomBrowserColomuns (void) {
 	BOOL Deleted=TRUE;
     
     for (Column = 0; Column < ROM_COLUMN_FIELDS; Column ++) {
-        RomBrowserFieldsWidth[Column] = ReadCfgInt("Rom Browser",RomBrowserFields[Column],RomBrowserFieldsWidth[Column]);
+        //RomBrowserFieldsWidth[Column] = ReadCfgInt("Rom Browser",RomBrowserFields[Column],RomBrowserFieldsWidth[Column]);
     }        
     memset(&lvColumn,0,sizeof(lvColumn));
 	
@@ -829,7 +829,7 @@ int getSortColumn()
 
 void ListViewSort()
 {
-    SortAscending = strcmp(Config.rom_browser_sort_method,"ASC")?FALSE:TRUE;
+    SortAscending = Config.rom_browser_sort_method == "ASC";
     drawSortArrow(getSortColumn());
     ListView_SortItems(hRomList, RomList_CompareItems, getSortColumn());  
 }
@@ -1035,7 +1035,7 @@ void RomList_ColoumnSortList(LPNMLISTVIEW pnmv)
 {
     if (getSortColumn()==pnmv->iSubItem) {
         SortAscending = SortAscending?FALSE:TRUE;
-        sprintf(Config.rom_browser_sort_method,SortAscending?"ASC":"DESC");
+        Config.rom_browser_sort_method = SortAscending ? "ASC" : "DESC";
     }
     Config.rom_browser_sorted_column = pnmv->iSubItem;
     ListViewSort();
@@ -1132,7 +1132,7 @@ void saveMD5toCache(char md5str[33]) {
 /////////////////////////// Recent Roms code ///////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-char* ParseName(char *rompath)
+char* ParseName(const char *rompath)
 {
     char drive[_MAX_DRIVE], dirn[_MAX_DIR] ;
 	static char fname[_MAX_FNAME], ext[_MAX_EXT] ;
@@ -1144,9 +1144,9 @@ char* ParseName(char *rompath)
 void ShiftRecentRoms()
 {
     int i;
-    for ( i = MAX_RECENT_ROMS - 1; i > 0; i--)
+    for ( i = Config.recent_rom_paths.size() - 1; i > 0; i--)
             {
-                 sprintf( Config.recent_rom_paths[i], Config.recent_rom_paths[i-1] );     
+        Config.recent_rom_paths[i] = Config.recent_rom_paths[i - 1];
             }
 }
 
@@ -1159,16 +1159,14 @@ void ClearRecentList (HWND hwnd,BOOL clear_array) {
     //apparently not needed because windows still is able to find the correct items
     //hMenu = GetSubMenu(hMenu, 0);
     //hMenu = GetSubMenu(hMenu, 5);
-	for (i = 0; i < MAX_RECENT_ROMS; i ++ ) {
+	for (i = 0; i < Config.recent_rom_paths.size(); i ++ ) {
 		DeleteMenu(hMenu, ID_RECENTROMS_FIRST + i, MF_BYCOMMAND);
 	}
 	if (clear_array) {
-	    memset( Config.recent_rom_paths, 0, MAX_RECENT_ROMS * sizeof(Config.recent_rom_paths[0]));
+        Config.recent_rom_paths.clear();
     }
    
 }
-
-bool emptyRecentROMs = false;
 
 void SetRecentList(HWND hwnd) {
     int i;
@@ -1182,24 +1180,22 @@ void SetRecentList(HWND hwnd) {
     menuinfo.fMask = MIIM_TYPE | MIIM_ID;
     menuinfo.fType = MFT_STRING;
     menuinfo.fState = MFS_ENABLED;
-    for ( i = 0 ; i < MAX_RECENT_ROMS  ; i++)   {
-              if (strcmp(Config.recent_rom_paths[i], "")==0) {
-                  if (i == 0 && !emptyRecentROMs) {
+    for ( i = 0 ; i < Config.recent_rom_paths.size(); i++)   {
+              if (Config.recent_rom_paths[i] == "") {
+                  if (i == 0) {
                       menuinfo.dwTypeData = (LPTSTR)"No Recent ROMs";
-                      emptyRecentROMs = true;
                   }
                   else break;
               }
               else {
-                  menuinfo.dwTypeData = ParseName(Config.recent_rom_paths[i]);
-                  emptyRecentROMs = false;
+                  menuinfo.dwTypeData = ParseName(Config.recent_rom_paths[i].c_str());
               }
     
 	          //menuinfo.dwTypeData = ParseName( Config.recent_rom_paths[i]);
               menuinfo.cch = strlen(menuinfo.dwTypeData);
 	          menuinfo.wID = ID_RECENTROMS_FIRST + i;
               InsertMenuItem( hSubMenu, 3 + i, TRUE, &menuinfo);
-              if (emptyRecentROMs || IsMenuItemEnabled(hMenu, REFRESH_ROM_BROWSER)) {
+              if (IsMenuItemEnabled(hMenu, REFRESH_ROM_BROWSER)) {
                   EnableMenuItem(hMenu, ID_LOAD_LATEST, MF_DISABLED);
                   EnableMenuItem(hSubMenu, ID_RECENTROMS_FIRST, MF_DISABLED);
               }
@@ -1214,12 +1210,10 @@ void SetRecentList(HWND hwnd) {
 
 // Adapted code from vcr.c
 void EnableRecentROMsMenu(HMENU hMenu, BOOL flag) {
-    if (!emptyRecentROMs) {
-        for (int i = 0; i < MAX_RECENT_ROMS; i++) {
+        for (int i = 0; i < Config.recent_rom_paths.size(); i++) {
             EnableMenuItem(hMenu, ID_RECENTROMS_FIRST + i, flag ? MF_ENABLED : MF_DISABLED);
         }
         EnableMenuItem(hMenu, ID_LOAD_LATEST, flag ? MF_ENABLED : MF_DISABLED);
-    }
 }
 
 void AddToRecentList(HWND hwnd,char *rompath) {
@@ -1227,21 +1221,21 @@ void AddToRecentList(HWND hwnd,char *rompath) {
     int i,j;
     if ( Config.is_recent_rom_paths_frozen ) return;
     
-    for (i=0;i<MAX_RECENT_ROMS-1 ;i++) {
+    for (i=0;i< Config.recent_rom_paths.size() -1 ;i++) {
           
-          if ( strcmp(Config.recent_rom_paths[i],rompath)==0) 
+          if (Config.recent_rom_paths[i] == rompath)
           { // Shifting Array up
-              for (j=i;j<MAX_RECENT_ROMS-1;j++) 
+              for (j=i;j< Config.recent_rom_paths.size() -1;j++)
               {
-                  sprintf( Config.recent_rom_paths[j], Config.recent_rom_paths[j+1] ); 
+                  Config.recent_rom_paths[j] = Config.recent_rom_paths[j + 1];
               }
-              Config.recent_rom_paths[MAX_RECENT_ROMS-1][0] = '\0';
+              Config.recent_rom_paths[Config.recent_rom_paths.size() -1][0] = '\0';
           }
     }
     
     ShiftRecentRoms();
     
-    sprintf( Config.recent_rom_paths[0], rompath);
+    Config.recent_rom_paths[0] = rompath;
      
     ClearRecentList ( hwnd, FALSE) ;
     SetRecentList( hwnd) ;
@@ -1252,15 +1246,15 @@ void RunRecentRom(int id) {
     int i;
     static char rompath[MAX_PATH];
     i = id - ID_RECENTROMS_FIRST;
-    if (i >= 0 && i<MAX_RECENT_ROMS) {
-        if (strcmp(Config.recent_rom_paths[i],"")==0) return;
-        sprintf( rompath,Config.recent_rom_paths[i]);
+    if (i >= 0 && i< Config.recent_rom_paths.size()) {
+        if (Config.recent_rom_paths[i] == "") return;
+        Config.recent_rom_paths[i].copy(rompath, MAX_PATH);
         StartRom( rompath );
     }
 }
 
 void DisableRecentRoms(HMENU hMenu, BOOL disable) {
-    for (int i = 0; i < MAX_RECENT_ROMS; i++)
+    for (int i = 0; i < Config.recent_rom_paths.size(); i++)
         EnableMenuItem(hMenu, ID_RECENTROMS_FIRST + i, (disable ? MF_DISABLED : MF_ENABLED));
 }
 

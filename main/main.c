@@ -61,9 +61,6 @@
 #include <signal.h>
 #endif
 
-int autoinc_slot = 0;
-int *autoinc_save_slot = &autoinc_slot;
-
 static char cwd[1024];
 int p_noask;
 

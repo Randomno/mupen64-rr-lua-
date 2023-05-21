@@ -79,7 +79,6 @@ extern "C" {
 	void StartSavestate();
 
 	typedef std::string String;
-	int shouldSave = FALSE;
 
 	bool ffup = false;
 	BOOL forceIgnoreRSP = false;
@@ -2588,8 +2587,6 @@ void exit_emu(int postquit)
 			if (!cmdlineNoGui)
 				SaveRomBrowserCache();
 		}
-		//if (shouldSave)
-		//SaveConfig();
 		ini_closeFile();
 	}
 	else
@@ -2602,7 +2599,6 @@ void exit_emu(int postquit)
 		freeRomList();
 		freeLanguages();
 		Gdiplus::GdiplusShutdown(gdiPlusToken);
-		//printf("free gdiplus\n");
 		PostQuitMessage(0);
 	}
 }
@@ -2696,8 +2692,6 @@ void ProcessToolTips(LPARAM lParam, HWND hWnd)
 
 void EnableStatusbar()
 {
-	shouldSave = TRUE;
-
 	if (Config.is_statusbar_enabled)
 	{
 		if (!IsWindow(hStatus))
@@ -2716,8 +2710,6 @@ void EnableStatusbar()
 
 void EnableToolbar()
 {
-	shouldSave = TRUE;
-
 	if (Config.is_toolbar_enabled && !VCR_isCapturing())
 	{
 		if (!hTool || !IsWindow(hTool))
@@ -2853,9 +2845,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 	case WM_SYSKEYDOWN:
 	{
 		BOOL hit = FALSE;
-		if (manualFPSLimit)
+		// we need to check if the hotkey pointer list has been initialized
+		// not sure why this path is sometimes reached randomly before load_config(), it technically shouldn't be possible, as the message loop hasn't started yet
+		if (manualFPSLimit && !hotkeys.empty())
 		{
-			if ((int)wParam == hotkeys[0]->key) // fast-forward on
+			if ((int)wParam == Config.fast_forward_hotkey.key) // fast-forward on
 			{
 				if (((GetKeyState(VK_SHIFT) & 0x8000) ? 1 : 0) == hotkeys[0]->shift
 					&& ((GetKeyState(VK_CONTROL) & 0x8000) ? 1 : 0) == hotkeys[0]->ctrl
@@ -3026,7 +3020,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		} break;
 		case ID_LUA_RECENT_FREEZE: {
 			CheckMenuItem(hMenu, ID_LUA_RECENT_FREEZE, (Config.is_recent_scripts_frozen ^= 1) ? MF_CHECKED : MF_UNCHECKED);
-			shouldSave = TRUE;
 			break;
 		}
 		case ID_LUA_RECENT_RESET: {
@@ -3047,7 +3040,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 #endif
 		} break;
 		case ID_FORCESAVE:
-			shouldSave = TRUE;
 			ini_updateFile(Config.is_ini_compressed);
 			SaveRomBrowserCache();
 			save_config();
@@ -3164,7 +3156,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 
 		case ID_LOOP_MOVIE:
 			VCR_toggleLoopMovie();
-			shouldSave = TRUE;
 			break;
 		case ID_RESTART_MOVIE:
 			if (VCR_isPlaying()) {
@@ -3192,9 +3183,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_RECENTMOVIES_FREEZE:
 			CheckMenuItem(hMenu, ID_RECENTMOVIES_FREEZE, (Config.is_recent_movie_paths_frozen ^= 1) ? MF_CHECKED : MF_UNCHECKED);
-			shouldSave = TRUE;
 			break;
-			//FreezeRecentMovies(mainHWND, TRUE);
 			break;
 		case ID_RECENTMOVIES_RESET:
 			ClearRecentMovies(TRUE);
@@ -3238,7 +3227,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			if (emu_launched && !emu_paused) {
 				pauseEmu(FALSE);
 			}
-			shouldSave = TRUE;
 			ChangeSettings(hwnd);
 			ini_updateFile(Config.is_ini_compressed);
 			if (emu_launched && emu_paused && !wasPaused) {
@@ -3851,9 +3839,11 @@ int WINAPI WinMain(
 	freopen_s(&f, "CONOUT$", "w", stderr);
 	printf("mupen64 debug console\n");
 #endif
-	/* Put absolute App path to AppPath variable */
+
 	getAppFullPath(AppPath);
 	app_hInstance = hInstance;
+	load_config();
+
 	InitCommonControls();
 	SaveCmdLineParameter(lpCmdLine);
 	printf("cmd: \"%s\"\n", lpCmdLine);
@@ -3870,9 +3860,6 @@ int WINAPI WinMain(
 	}
 	emu_launched = 0;
 	emu_paused = 1;
-	/************    Loading Config  *******/
-	load_config();
-	/************************************************************************/
 
 	WNDCLASSEX wc;
 	HWND hwnd;
@@ -4046,7 +4033,6 @@ int WINAPI WinMain(
 							break;
 						}
 						last_pressed_hotkey = hotkeys[i];
-						printf("Pushed hotkey %s\n", hotkeys[i]->name.c_str());
 						SendMessage(hwnd, WM_COMMAND, hotkeys[i]->command, 0);
 						break;
 					}
@@ -4073,6 +4059,7 @@ int WINAPI WinMain(
 		}
 	}
 
+	save_config();
 	CloseLogWindow();
 	CloseKaillera();
 	return Msg.wParam;

@@ -1004,7 +1004,6 @@ DWORD WINAPI RefreshRomBrowserInternal(LPVOID tParam) {
 
 void RefreshRomBrowser()
 {
-    shouldSave = TRUE;
     romBrowserRefreshThread = CreateThread(NULL, 0, RefreshRomBrowserInternal, NULL, 0, &Id);
 }
 
@@ -1261,7 +1260,6 @@ void DisableRecentRoms(HMENU hMenu, BOOL disable) {
 void FreezeRecentRoms(HWND hWnd, BOOL ChangeConfigVariable) {
 	HMENU hMenu = GetMenu(hWnd);
 	if (ChangeConfigVariable) {
-       shouldSave = 1;
 	   Config.is_recent_rom_paths_frozen = 1 - Config.is_recent_rom_paths_frozen ;
 	}
     CheckMenuItem(hMenu, ID_RECENTROMS_FREEZE, MF_BYCOMMAND | (Config.is_recent_rom_paths_frozen ? MFS_CHECKED : MFS_UNCHECKED));

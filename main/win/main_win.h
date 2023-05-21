@@ -40,7 +40,6 @@ extern HWND hTool, mainHWND, hStatus, hRomList, hStatusProgress;
 extern HINSTANCE app_hInstance;
 extern BOOL manualFPSLimit;
 extern char statusmsg[800];
-extern int shouldSave;
 
 extern char gfx_name[255];
 extern char input_name[255];

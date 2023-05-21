@@ -302,7 +302,7 @@
     <ClCompile Include="..\..\main\win\Config.cpp">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main\win\configdialog.c">
+    <ClCompile Include="..\..\main\win\configdialog.cpp">
       <Filter>Source Files\main\win</Filter>
     </ClCompile>
     <ClCompile Include="..\..\main\win\dumplist.c">

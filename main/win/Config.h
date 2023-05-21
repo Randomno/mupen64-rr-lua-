@@ -18,10 +18,10 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
-#define STR_LEN 260
+#define IDENTIFIER_LENGTH 260
 
 typedef struct t_hotkey {
-    std::string name;
+    std::string identifier;
     int32_t key;
     int32_t ctrl;
     int32_t shift;
@@ -75,6 +75,11 @@ typedef struct _CONFIG {
     t_hotkey select_slot_9_hotkey;
 
 #pragma endregion
+    
+    /// <summary>
+    /// Used for determining whether the config state is validated
+    /// </summary>
+    int32_t validation_marker;
 
     /// <summary>
     /// The selected language

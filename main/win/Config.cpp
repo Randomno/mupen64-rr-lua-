@@ -119,7 +119,7 @@ CONFIG get_default_config()
 	CONFIG config = { };
 
 	config.fast_forward_hotkey = {
-		.name = "Fast-forward",
+		.identifier = "Fast-forward",
 		.key = VK_TAB,
 		.ctrl = 0,
 		.shift = 0,
@@ -128,7 +128,7 @@ CONFIG get_default_config()
 	};
 
 	config.speed_up_hotkey = {
-		.name = "Speed up",
+		.identifier = "Speed up",
 		.key = VK_OEM_PLUS,
 		.ctrl = 0,
 		.shift = 0,
@@ -137,7 +137,7 @@ CONFIG get_default_config()
 	};
 
 	config.speed_down_hotkey = {
-		.name = "Speed down",
+		.identifier = "Speed down",
 		.key = VK_OEM_MINUS,
 		.ctrl = 0,
 		.shift = 0,
@@ -146,7 +146,7 @@ CONFIG get_default_config()
 	};
 
 	config.frame_advance_hotkey = {
-		.name = "Frame advance",
+		.identifier = "Frame advance",
 		.key = VK_OEM_5,
 		.ctrl = 0,
 		.shift = 0,
@@ -155,7 +155,7 @@ CONFIG get_default_config()
 	};
 
 	config.pause_hotkey = {
-		.name = "Pause",
+		.identifier = "Pause",
 		.key = VK_PAUSE,
 		.ctrl = 0,
 		.shift = 0,
@@ -164,7 +164,7 @@ CONFIG get_default_config()
 	};
 
 	config.toggle_read_only_hotkey = {
-		.name = "Toggle read-only",
+		.identifier = "Toggle read-only",
 		.key = 0x38 /* 8 */,
 		.ctrl = 1,
 		.shift = 0,
@@ -173,7 +173,7 @@ CONFIG get_default_config()
 	};
 
 	config.start_movie_playback_hotkey = {
-		.name = "Start movie playback",
+		.identifier = "Start movie playback",
 		.key = 0x50 /* P */,
 		.ctrl = 1,
 		.shift = 0,
@@ -182,7 +182,7 @@ CONFIG get_default_config()
 	};
 
 	config.stop_movie_playback_hotkey = {
-		.name = "Stop movie playback",
+		.identifier = "Stop movie playback",
 		.key = 0x53 /* S */,
 		.ctrl = 1,
 		.shift = 0,
@@ -191,7 +191,7 @@ CONFIG get_default_config()
 	};
 
 	config.start_movie_recording_hotkey = {
-		.name = "Start movie recording",
+		.identifier = "Start movie recording",
 		.key = 0x52 /* R */,
 		.ctrl = 1,
 		.shift = 0,
@@ -200,7 +200,7 @@ CONFIG get_default_config()
 	};
 
 	config.stop_movie_recording_hotkey = {
-		.name = "Stop movie recording",
+		.identifier = "Stop movie recording",
 		.key = 0x53 /* S */,
 		.ctrl = 1,
 		.shift = 0,
@@ -209,7 +209,7 @@ CONFIG get_default_config()
 	};
 
 	config.take_screenshot_hotkey = {
-		.name = "Take screenshot",
+		.identifier = "Take screenshot",
 		.key = VK_F12,
 		.ctrl = 0,
 		.shift = 0,
@@ -218,7 +218,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_current_slot_hotkey = {
-		.name = "Save to current slot",
+		.identifier = "Save to current slot",
 		.key = 0x49 /* I */,
 		.ctrl = 0,
 		.shift = 0,
@@ -227,7 +227,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_current_slot_hotkey = {
-		.name = "Load from current slot",
+		.identifier = "Load from current slot",
 		.key = 0x50 /* P */,
 		.ctrl = 0,
 		.shift = 0,
@@ -236,7 +236,7 @@ CONFIG get_default_config()
 	};
 
 	config.restart_movie_hotkey = {
-		.name = "Restart playing movie",
+		.identifier = "Restart playing movie",
 		.key = 0x52 /* R */,
 		.ctrl = 1,
 		.shift = 1,
@@ -245,7 +245,7 @@ CONFIG get_default_config()
 	};
 
 	config.play_latest_movie_hotkey = {
-		.name = "Play latest movie",
+		.identifier = "Play latest movie",
 		.key = 0x50 /* P */,
 		.ctrl = 1,
 		.shift = 1,
@@ -254,7 +254,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_1_hotkey = {
-		.name = "Save to slot 1",
+		.identifier = "Save to slot 1",
 		.key = 0x31 /* 1 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -263,7 +263,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_2_hotkey = {
-		.name = "Save to slot 2",
+		.identifier = "Save to slot 2",
 		.key = 0x32 /* 2 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -272,7 +272,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_3_hotkey = {
-		.name = "Save to slot 3",
+		.identifier = "Save to slot 3",
 		.key = 0x33 /* 3 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -281,7 +281,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_4_hotkey = {
-		.name = "Save to slot 4",
+		.identifier = "Save to slot 4",
 		.key = 0x34 /* 4 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -290,7 +290,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_5_hotkey = {
-		.name = "Save to slot 5",
+		.identifier = "Save to slot 5",
 		.key = 0x35 /* 5 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -299,7 +299,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_6_hotkey = {
-		.name = "Save to slot 6",
+		.identifier = "Save to slot 6",
 		.key = 0x36 /* 6 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -308,7 +308,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_7_hotkey = {
-		.name = "Save to slot 7",
+		.identifier = "Save to slot 7",
 		.key = 0x37 /* 7 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -317,7 +317,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_8_hotkey = {
-		.name = "Save to slot 8",
+		.identifier = "Save to slot 8",
 		.key = 0x38 /* 8 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -326,7 +326,7 @@ CONFIG get_default_config()
 	};
 
 	config.save_to_slot_9_hotkey = {
-		.name = "Save to slot 9",
+		.identifier = "Save to slot 9",
 		.key = 0x39 /* 9 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -335,7 +335,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_1_hotkey = {
-	  .name = "Load from slot 1",
+	  .identifier = "Load from slot 1",
 	  .key = VK_F1,
 	  .ctrl = 0,
 	  .shift = 0,
@@ -344,7 +344,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_2_hotkey = {
-		.name = "Load from slot 2",
+		.identifier = "Load from slot 2",
 		.key = VK_F2,
 		.ctrl = 0,
 		.shift = 0,
@@ -353,7 +353,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_3_hotkey = {
-		.name = "Load from slot 3",
+		.identifier = "Load from slot 3",
 		.key = VK_F3,
 		.ctrl = 0,
 		.shift = 0,
@@ -362,7 +362,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_4_hotkey = {
-		.name = "Load from slot 4",
+		.identifier = "Load from slot 4",
 		.key = VK_F4,
 		.ctrl = 0,
 		.shift = 0,
@@ -371,7 +371,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_5_hotkey = {
-		.name = "Load from slot 5",
+		.identifier = "Load from slot 5",
 		.key = VK_F5,
 		.ctrl = 0,
 		.shift = 0,
@@ -380,7 +380,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_6_hotkey = {
-		.name = "Load from slot 6",
+		.identifier = "Load from slot 6",
 		.key = VK_F6,
 		.ctrl = 0,
 		.shift = 0,
@@ -389,7 +389,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_7_hotkey = {
-		.name = "Load from slot 7",
+		.identifier = "Load from slot 7",
 		.key = VK_F7,
 		.ctrl = 0,
 		.shift = 0,
@@ -398,7 +398,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_8_hotkey = {
-		.name = "Load from slot 8",
+		.identifier = "Load from slot 8",
 		.key = VK_F8,
 		.ctrl = 0,
 		.shift = 0,
@@ -407,7 +407,7 @@ CONFIG get_default_config()
 	};
 
 	config.load_from_slot_9_hotkey = {
-		.name = "Load from slot 9",
+		.identifier = "Load from slot 9",
 		.key = VK_F9,
 		.ctrl = 0,
 		.shift = 0,
@@ -416,7 +416,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_1_hotkey = {
-	  .name = "Select slot 1",
+	  .identifier = "Select slot 1",
 	  .key = 0x31 /* 1 */,
 	  .ctrl = 0,
 	  .shift = 0,
@@ -425,7 +425,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_2_hotkey = {
-		.name = "Select slot 2",
+		.identifier = "Select slot 2",
 		.key = 0x32 /* 2 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -434,7 +434,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_3_hotkey = {
-		.name = "Select slot 3",
+		.identifier = "Select slot 3",
 		.key = 0x33 /* 3 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -443,7 +443,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_4_hotkey = {
-		.name = "Select slot 4",
+		.identifier = "Select slot 4",
 		.key = 0x34 /* 4 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -452,7 +452,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_5_hotkey = {
-		.name = "Select slot 5",
+		.identifier = "Select slot 5",
 		.key = 0x35 /* 5 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -461,7 +461,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_6_hotkey = {
-		.name = "Select slot 6",
+		.identifier = "Select slot 6",
 		.key = 0x36 /* 6 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -470,7 +470,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_7_hotkey = {
-		.name = "Select slot 7",
+		.identifier = "Select slot 7",
 		.key = 0x37 /* 7 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -479,7 +479,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_8_hotkey = {
-		.name = "Select slot 8",
+		.identifier = "Select slot 8",
 		.key = 0x38 /* 8 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -488,7 +488,7 @@ CONFIG get_default_config()
 	};
 
 	config.select_slot_9_hotkey = {
-		.name = "Select slot 9",
+		.identifier = "Select slot 9",
 		.key = 0x39 /* 9 */,
 		.ctrl = 0,
 		.shift = 0,
@@ -496,7 +496,7 @@ CONFIG get_default_config()
 		.command = (ID_CURRENTSAVE_1 - 1) + 9,
 	};
 
-
+	config.validation_marker = 1;
 	config.language = "English";
 	config.show_fps = 1;
 	config.show_vis_per_second = 1;
@@ -561,105 +561,186 @@ CONFIG get_default_config()
 	return config;
 }
 
+void handle_hotkey_value(mINI::INIStructure& ini, std::string field_name, int32_t is_reading, t_hotkey* hotkey) {
+	if (is_reading)
+	{
+		hotkey->key = std::stoi(ini["Config"][field_name + "_key"]);
+		hotkey->ctrl = std::stoi(ini["Config"][field_name + "_ctrl"]);
+		hotkey->shift = std::stoi(ini["Config"][field_name + "_shift"]);
+		hotkey->alt = std::stoi(ini["Config"][field_name + "_alt"]);
+	}
+	else {
+		ini["Config"][field_name + "_key"] = std::to_string(hotkey->key);
+		ini["Config"][field_name + "_ctrl"] = std::to_string(hotkey->ctrl);
+		ini["Config"][field_name + "_shift"] = std::to_string(hotkey->shift);
+		ini["Config"][field_name + "_alt"] = std::to_string(hotkey->alt);
+	}
+}
+
+const auto first_offset = offsetof(CONFIG, fast_forward_hotkey);
+const auto last_offset = offsetof(CONFIG, select_slot_9_hotkey);
+const CONFIG default_config = get_default_config();
+
+std::vector<t_hotkey*> collect_hotkeys(const CONFIG* config) {
+	std::vector<t_hotkey*> hotkeys;
+	t_hotkey* arr = (t_hotkey*)config;
+	// NOTE:
+	// last_offset should contain the offset of the last hotkey
+	// this also requires that the hotkeys are laid out contiguously, or else the pointer arithmetic fails
+	// i recommend inserting your new hotkeys before the savestate hotkeys... pretty please
+	for (size_t i = 0; i < ((last_offset - first_offset) / sizeof(t_hotkey)) + 1; i++)
+	{
+		auto hotkey = &arr[i];
+		printf("Hotkey[%d]: %s\n", i, hotkey->identifier.c_str());
+		hotkeys.push_back(hotkey);
+	}
+	printf("---\n");
+
+	return hotkeys;
+}
+
 mINI::INIStructure handle_config_ini(bool is_reading, mINI::INIStructure ini) {
-#define HANDLE_INT_VALUE(x, y) if(is_reading) { y = std::stoi(ini["Config"][x]); } else { ini["Config"][x] = std::to_string(y); }
-#define HANDLE_STRING_VALUE(x, y) if(is_reading) { y = ini["Config"][x]; } else { ini["Config"][x] = y; }
-#define HANDLE_STRING_VECTOR_VALUE(x, y)\
+#define HANDLE_INT_VALUE(x)\
+	if(is_reading)\
+	{\
+		Config.x = std::stoi(ini["Config"][#x]);\
+	}\
+	else {\
+		ini["Config"][#x] = std::to_string(Config.x);\
+	}\
+
+#define HANDLE_STRING_VALUE(x)\
+	if(is_reading)\
+	{\
+		Config.x = ini["Config"][#x];\
+	}\
+	else {\
+		ini["Config"][#x] = Config.x;\
+	}\
+
+
+#define HANDLE_STRING_VECTOR_VALUE(x)\
 	if (is_reading)\
 	{\
 		int vector_length = 0;\
 		for (size_t i = 0; i < INT32_MAX; i++)\
 		{\
-			if (!ini["Config"].has(std::string(x) + "_" + std::to_string(i)))\
+			if (!ini["Config"].has(std::string(#x) + "_" + std::to_string(i)))\
 			{\
 				vector_length = i;\
 				break;\
 			}\
 		}\
-		y.clear();\
+		Config.x.clear();\
 		for (size_t i = 0; i < vector_length; i++)\
 		{\
-			y.push_back(ini["Config"][std::string(x) + "_" + std::to_string(i)]);\
+			Config.x.push_back(ini["Config"][std::string(#x) + "_" + std::to_string(i)]);\
 		}\
 	}\
 	else {\
-		for (size_t i = 0; i < y.size(); i++)\
+		for (size_t i = 0; i < Config.x.size(); i++)\
 		{\
-			ini["Config"][std::string(x) + "_" + std::to_string(i)] = y[i];\
+			ini["Config"][std::string(#x) + "_" + std::to_string(i)] = Config.x[i];\
 		}\
 	}\
+
+
+	if (is_reading)
+	{
+		// our config is empty, so hotkeys are missing identifiers
+		// we need to copy the identifiers from a default config
+		// FIXME: this assumes that the loaded config's hotkeys map 1:1 to the current hotkeys, which may not be the case
+
+		auto base_config_hotkey_pointers = collect_hotkeys(&default_config);
+		auto hotkey_pointers = collect_hotkeys(&Config);
+
+		for (size_t i = 0; i < hotkey_pointers.size(); i++)
+		{
+			hotkey_pointers[i]->identifier = std::string(base_config_hotkey_pointers[i]->identifier);
+		}
+	}
+
 	
-	// TODO: 
-	// consider trade-off: 
-	// - cleverer macros { HANDLE_STRING_VALUE(language); }
-	// or
-	// - intellisense
+	auto hotkey_pointers = collect_hotkeys(&Config);
 
-	HANDLE_STRING_VALUE("language", Config.language);
-	HANDLE_INT_VALUE("show_fps", Config.show_fps);
-	HANDLE_INT_VALUE("show_vis_per_second", Config.show_vis_per_second);
-	HANDLE_INT_VALUE("prevent_suspicious_rom_loading", Config.prevent_suspicious_rom_loading);
-	HANDLE_INT_VALUE("is_savestate_warning_enabled", Config.is_savestate_warning_enabled);
-	HANDLE_INT_VALUE("is_rom_movie_compatibility_check_enabled", Config.is_rom_movie_compatibility_check_enabled);
-	HANDLE_INT_VALUE("is_fps_limited", Config.is_fps_limited);
-	HANDLE_INT_VALUE("is_ini_compressed", Config.is_ini_compressed);
-	HANDLE_INT_VALUE("core_type", Config.core_type);
-	HANDLE_INT_VALUE("is_fps_modifier_enabled", Config.is_fps_modifier_enabled);
-	HANDLE_INT_VALUE("fps_modifier", Config.fps_modifier);
-	HANDLE_INT_VALUE("frame_skip_frequency", Config.frame_skip_frequency);
-	HANDLE_INT_VALUE("is_movie_loop_enabled", Config.is_movie_loop_enabled);
-	HANDLE_INT_VALUE("is_frame_count_visual_zero_index", Config.is_frame_count_visual_zero_index);
-	HANDLE_INT_VALUE("is_movie_backup_enabled", Config.is_movie_backup_enabled);
-	HANDLE_INT_VALUE("movie_backup_level", Config.movie_backup_level);
-	HANDLE_INT_VALUE("cpu_clock_speed_multiplier", Config.cpu_clock_speed_multiplier);
-	HANDLE_INT_VALUE("is_fullscreen_start_enabled", Config.is_fullscreen_start_enabled);
-	HANDLE_INT_VALUE("is_unfocused_pause_enabled", Config.is_unfocused_pause_enabled);
-	HANDLE_INT_VALUE("use_global_plugins", Config.use_global_plugins);
-	HANDLE_INT_VALUE("is_toolbar_enabled", Config.is_toolbar_enabled);
-	HANDLE_INT_VALUE("is_statusbar_enabled", Config.is_statusbar_enabled);
-	HANDLE_INT_VALUE("is_slot_autoincrement_enabled", Config.is_slot_autoincrement_enabled);
-	HANDLE_INT_VALUE("is_state_independent_state_loading_allowed", Config.is_state_independent_state_loading_allowed);
-	HANDLE_INT_VALUE("is_good_name_column_enabled", Config.is_good_name_column_enabled);
-	HANDLE_INT_VALUE("is_internal_name_column_enabled", Config.is_internal_name_column_enabled);
-	HANDLE_INT_VALUE("is_country_column_enabled", Config.is_country_column_enabled);
-	HANDLE_INT_VALUE("is_size_column_enabled", Config.is_size_column_enabled);
-	HANDLE_INT_VALUE("is_filename_column_enabled", Config.is_filename_column_enabled);
-	HANDLE_INT_VALUE("is_md5_column_enabled", Config.is_md5_column_enabled);
-	HANDLE_INT_VALUE("is_default_plugins_directory_used", Config.is_default_plugins_directory_used);
-	HANDLE_INT_VALUE("is_default_saves_directory_used", Config.is_default_saves_directory_used);
-	HANDLE_INT_VALUE("is_default_screenshots_directory_used", Config.is_default_screenshots_directory_used);
-	HANDLE_STRING_VALUE("plugins_directory", Config.plugins_directory);
-	HANDLE_STRING_VALUE("saves_directory", Config.saves_directory);
-	HANDLE_STRING_VALUE("screenshots_directory", Config.screenshots_directory);
-	HANDLE_STRING_VALUE("states_path", Config.states_path);
-	HANDLE_STRING_VECTOR_VALUE("recent_rom_paths", Config.recent_rom_paths);
-	HANDLE_INT_VALUE("is_recent_rom_paths_frozen", Config.is_recent_rom_paths_frozen);
-	HANDLE_STRING_VECTOR_VALUE("recent_movie_paths", Config.recent_movie_paths);
-	HANDLE_INT_VALUE("is_recent_movie_paths_frozen", Config.is_recent_movie_paths_frozen);
-	HANDLE_INT_VALUE("rom_browser_sorted_column", Config.rom_browser_sorted_column);
-	HANDLE_STRING_VALUE("rom_browser_sort_method", Config.rom_browser_sort_method);
-	HANDLE_INT_VALUE("is_rom_browser_recursion_enabled", Config.is_rom_browser_recursion_enabled);
-	HANDLE_INT_VALUE("is_reset_recording_disabled", Config.is_reset_recording_disabled);
-	HANDLE_INT_VALUE("is_unknown_hotkey_selection_allowed", Config.is_unknown_hotkey_selection_allowed);
-	HANDLE_STRING_VALUE("avi_capture_path", Config.avi_capture_path);
-	HANDLE_INT_VALUE("synchronization_mode", Config.synchronization_mode);
-	HANDLE_STRING_VALUE("lua_script_path", Config.lua_script_path);
-	HANDLE_STRING_VECTOR_VALUE("recent_lua_script_paths", Config.recent_lua_script_paths);
-	HANDLE_INT_VALUE("is_recent_scripts_frozen", Config.is_recent_scripts_frozen);
-	HANDLE_INT_VALUE("is_lua_simple_dialog_enabled", Config.is_lua_simple_dialog_enabled);
-	HANDLE_INT_VALUE("is_lua_exit_confirm_enabled", Config.is_lua_exit_confirm_enabled);
-	HANDLE_INT_VALUE("is_statusbar_frequent_refresh_enabled", Config.is_statusbar_frequent_refresh_enabled);
-	HANDLE_INT_VALUE("is_round_towards_zero_enabled", Config.is_round_towards_zero_enabled);
-	HANDLE_INT_VALUE("is_float_exception_propagation_enabled", Config.is_float_exception_propagation_enabled);
-	HANDLE_INT_VALUE("is_input_delay_enabled", Config.is_input_delay_enabled);
-	HANDLE_INT_VALUE("is_lua_double_buffered", Config.is_lua_double_buffered);
+	hotkeys.clear();
+	for (size_t i = 0; i < hotkey_pointers.size(); i++)
+	{
+		handle_hotkey_value(ini, hotkey_pointers[i]->identifier, is_reading, hotkey_pointers[i]);
+		hotkeys.push_back(hotkey_pointers[i]);
+	}
 
-	return ini;
+	
+
+	HANDLE_STRING_VALUE(language)
+		HANDLE_INT_VALUE(show_fps)
+		HANDLE_INT_VALUE(show_vis_per_second)
+		HANDLE_INT_VALUE(is_savestate_warning_enabled)
+		HANDLE_INT_VALUE(is_rom_movie_compatibility_check_enabled)
+		HANDLE_INT_VALUE(is_fps_limited)
+		HANDLE_INT_VALUE(is_ini_compressed)
+		HANDLE_INT_VALUE(core_type)
+		HANDLE_INT_VALUE(is_fps_modifier_enabled)
+		HANDLE_INT_VALUE(fps_modifier)
+		HANDLE_INT_VALUE(frame_skip_frequency)
+		HANDLE_INT_VALUE(is_movie_loop_enabled)
+		HANDLE_INT_VALUE(is_frame_count_visual_zero_index)
+		HANDLE_INT_VALUE(is_movie_backup_enabled)
+		HANDLE_INT_VALUE(movie_backup_level)
+		HANDLE_INT_VALUE(cpu_clock_speed_multiplier)
+		HANDLE_INT_VALUE(is_fullscreen_start_enabled)
+		HANDLE_INT_VALUE(is_unfocused_pause_enabled)
+		HANDLE_INT_VALUE(use_global_plugins)
+		HANDLE_INT_VALUE(is_toolbar_enabled)
+		HANDLE_INT_VALUE(is_statusbar_enabled)
+		HANDLE_INT_VALUE(is_slot_autoincrement_enabled)
+		HANDLE_INT_VALUE(is_state_independent_state_loading_allowed)
+		HANDLE_INT_VALUE(is_good_name_column_enabled)
+		HANDLE_INT_VALUE(is_internal_name_column_enabled)
+		HANDLE_INT_VALUE(is_country_column_enabled)
+		HANDLE_INT_VALUE(is_size_column_enabled)
+		HANDLE_INT_VALUE(is_filename_column_enabled)
+		HANDLE_INT_VALUE(is_md5_column_enabled)
+		HANDLE_INT_VALUE(is_default_plugins_directory_used)
+		HANDLE_INT_VALUE(is_default_saves_directory_used)
+		HANDLE_INT_VALUE(is_default_screenshots_directory_used)
+		HANDLE_STRING_VALUE(plugins_directory)
+		HANDLE_STRING_VALUE(saves_directory)
+		HANDLE_STRING_VALUE(screenshots_directory)
+		HANDLE_STRING_VALUE(states_path)
+		HANDLE_STRING_VECTOR_VALUE(recent_rom_paths)
+		HANDLE_INT_VALUE(is_recent_rom_paths_frozen)
+		HANDLE_STRING_VECTOR_VALUE(recent_movie_paths)
+		HANDLE_INT_VALUE(is_recent_movie_paths_frozen)
+		HANDLE_INT_VALUE(rom_browser_sorted_column)
+		HANDLE_STRING_VALUE(rom_browser_sort_method)
+		HANDLE_INT_VALUE(is_rom_browser_recursion_enabled)
+		HANDLE_INT_VALUE(is_reset_recording_disabled)
+		HANDLE_INT_VALUE(is_unknown_hotkey_selection_allowed)
+		HANDLE_STRING_VALUE(avi_capture_path)
+		HANDLE_INT_VALUE(synchronization_mode)
+		HANDLE_STRING_VALUE(lua_script_path)
+		HANDLE_STRING_VECTOR_VALUE(recent_lua_script_paths)
+		HANDLE_INT_VALUE(is_recent_scripts_frozen)
+		HANDLE_INT_VALUE(is_lua_simple_dialog_enabled)
+		HANDLE_INT_VALUE(is_lua_exit_confirm_enabled)
+		HANDLE_INT_VALUE(is_statusbar_frequent_refresh_enabled)
+		HANDLE_INT_VALUE(is_round_towards_zero_enabled)
+		HANDLE_INT_VALUE(is_float_exception_propagation_enabled)
+		HANDLE_INT_VALUE(is_input_delay_enabled)
+		HANDLE_INT_VALUE(is_lua_double_buffered)
+
+		return ini;
+}
+
+extern char AppPath[];
+const std::string get_config_path() {
+	return std::string(AppPath) + "config.ini";
 }
 
 void save_config()
 {
-	mINI::INIFile file("config.ini");
+	mINI::INIFile file(get_config_path());
 	mINI::INIStructure ini;
 
 	ini = handle_config_ini(false, ini);
@@ -669,33 +750,20 @@ void save_config()
 
 void load_config()
 {
-	hotkeys.clear();
-	size_t first_offset = offsetof(CONFIG, fast_forward_hotkey);
-	// NOTE:
-	// last_offset should contain the offset of the last hotkey
-	// this also requires that the hotkeys are laid out contiguously, or else the pointer arithmetic fails
-	// i recommend inserting your new hotkeys before the savestate hotkeys... pretty please
-	size_t last_offset = offsetof(CONFIG, select_slot_9_hotkey);
-	for (size_t offset = first_offset; offset <= last_offset; offset += sizeof(t_hotkey)) {
-		hotkeys.push_back((t_hotkey*)((char*)&Config + offset));
+	struct stat buf;
+	if (stat(get_config_path().c_str(), &buf) != 0)
+	{
+		Config = get_default_config();
+		save_config();
+		printf("[CONFIG] Default config file does not exist. Generating...\n");
 	}
 
-	mINI::INIFile file("config.ini");
+	mINI::INIFile file(get_config_path());
 	mINI::INIStructure ini;
 	file.read(ini);
 
-	struct stat buf;
-	printf("STAT: %d\n", stat("config.ini", &buf));
+	ini = handle_config_ini(true, ini);
 
-	if (stat("config.ini", &buf) != 0)
-	{
-		// save default config if it doesn't exist
-		Config = get_default_config();
-		save_config();
-		printf("Generated default config file\n");
-	}
-
-	ini = handle_config_ini(false, ini);
 }
 
 void SetDlgItemHotkey(HWND hwnd, int idc, t_hotkey* hotkeys)

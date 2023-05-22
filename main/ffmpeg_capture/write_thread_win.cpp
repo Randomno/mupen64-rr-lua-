@@ -2,4 +2,4 @@
 #include <array>
 
 #include "ffmpeg_capture.hpp"
-#include "vcr.h"
+#include "../vcr.hpp"

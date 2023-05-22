@@ -2,11 +2,9 @@
 #include "LuaConsole.h"
 #include "Recent.h"
 
-#ifdef _WIN32
 #include <windows.h>
-#include "win/main_win.h"
+#include "../main/win/main_win.hpp"
 #include "../winproject/resource.h" //for menu id
-#endif
 
 BOOL freezeRecentScript;
 

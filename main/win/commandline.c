@@ -22,9 +22,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "commandline.h"
-#include "main_win.h"
+#include "main_win.hpp"
 #include "../plugin.h"
-#include "GUI_LogWindow.h"
 
 
 BOOL cmdlineMode = 0;

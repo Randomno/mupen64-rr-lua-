@@ -34,21 +34,18 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <zlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <zlib.h>
+#include <minizip/unzip.h>
 
+#include "lib/md5.h"
 #include "rom.h"
 #include "../memory/memory.h"
-#include "unzip.h"
-#include "guifuncs.h"
-#include "md5.h"
 #include "mupenIniApi.h"
-#include "guifuncs.h"
-#include "../main/win/Config.h"
-#include <win/rombrowser.h>
-#include <win/main_win.h>
-#include <win/inifunctions.h>
+#include "../main/win/Config.hpp"
+#include "win/rombrowser.h"
+#include "win/main_win.hpp"
 
 static FILE *rom_file;
 static gzFile z_rom_file;
@@ -120,10 +117,10 @@ bool validRomExt(const char* filename) {
 	const char* str = getExt(filename);
 	if (str == "\0" || str == "0") return 0;
 	// z64,n64,v64,rom
-	return !stricmp(str, "z64") ||
-		   !stricmp(str, "n64") ||
-		   !stricmp(str, "v64") ||
-		   !stricmp(str, "rom");
+	return !_stricmp(str, "z64") ||
+		   !_stricmp(str, "n64") ||
+		   !_stricmp(str, "v64") ||
+		   !_stricmp(str, "rom");
 }
 
 static int find_file(char* argv)
@@ -237,7 +234,6 @@ int rom_read(const char *argv)
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_loading_progress(tmp);
 	       }
 	  }
      }
@@ -248,7 +244,6 @@ int rom_read(const char *argv)
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_loading_progress(tmp);
 	       }
 	  }
      }
@@ -260,7 +255,6 @@ int rom_read(const char *argv)
 	     if (tmp!=(int)((i/(float)taille_rom)*100))
 	       {
 		  tmp=(int)(i/(float)(taille_rom)*100);
-		  display_loading_progress(tmp);
 	       }
 	  }
 	unzCloseCurrentFile(zip);
@@ -312,7 +306,6 @@ int rom_read(const char *argv)
    ROM_HEADER->unknown = 0; // Clean up ROMs that accidentally set the unused bytes (ensuring previous fields are null terminated)
    ROM_HEADER->Unknown[0] = 0;
    ROM_HEADER->Unknown[1] = 0;
-   display_loading_progress(100);
    printf ("%x %x %x %x\n", ROM_HEADER->init_PI_BSB_DOM1_LAT_REG,
 	   ROM_HEADER->init_PI_BSB_DOM1_PGS_REG,
 	   ROM_HEADER->init_PI_BSB_DOM1_PWD_REG,
@@ -348,8 +341,8 @@ int rom_read(const char *argv)
    
    // loading rom settings and checking if it's a good dump
    md5_init(&state);
-   md5_append(&state, (const md5_byte_t *)rom, taille_rom);
-   md5_finish(&state, digest);
+   md5_append(&state, rom, taille_rom);
+   md5_finish(&state, (unsigned char*)digest);
    printf("md5 code:");
    for (i=0; i<16; i++) printf("%02X", digest[i]);
    printf("\n");
@@ -579,7 +572,7 @@ void calculateMD5(const char *argv, unsigned char digest[16])
 	return;
      }
    md5_init(&state);
-   md5_append(&state, (const md5_byte_t *)rom, taille_rom);
+   md5_append(&state, rom, taille_rom);
    md5_finish(&state, digest);
    free(rom);
    rom = NULL;
@@ -597,13 +590,10 @@ void audit_roms() {
 
 		strcpy(TempMessage, pRomInfo->MD5);
 		if (!strcmp(TempMessage, "")) {
-			calculateMD5(pRomInfo->szFullFileName, digest);
+			calculateMD5(pRomInfo->szFullFileName, (unsigned char*)digest);
 			MD5toString(digest, TempMessage);
 		}
 		strcpy(pRomInfo->MD5, TempMessage);
-		if (getIniGoodNameByMD5(TempMessage, tempname))
-			strcpy(pRomInfo->GoodName, tempname);
-		else
-			sprintf(pRomInfo->GoodName, "%s (not found in INI file)", pRomInfo->InternalName);
+		sprintf(pRomInfo->GoodName, "%s (not found in INI file)", pRomInfo->InternalName);
 	}
 }

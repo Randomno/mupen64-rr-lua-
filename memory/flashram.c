@@ -32,7 +32,7 @@
 
 #include "../r4300/r4300.h"
 #include "memory.h"
-#include "../main/guifuncs.h"
+#include "../main/win/guifuncs.hpp"
 
 int use_flashram;
 
@@ -107,9 +107,9 @@ void flashram_command(unsigned long command)
 		  char *filename;
 		  FILE *f;
 		  int i;
-		  filename = (char*)malloc(strlen(get_savespath())+
+		  filename = (char*)malloc(strlen(get_savespath().c_str())+
 				    strlen(ROM_SETTINGS.goodname)+4+1);
-		  strcpy(filename, get_savespath());
+		  strcpy(filename, get_savespath().c_str());
 		  strcat(filename, ROM_SETTINGS.goodname);
 		  strcat(filename, ".fla");
 		  f = fopen(filename, "rb");
@@ -132,9 +132,9 @@ void flashram_command(unsigned long command)
 		  char *filename;
 		  FILE *f;
 		  int i;
-		  filename = (char*)malloc(strlen(get_savespath())+
+		  filename = (char*)malloc(strlen(get_savespath().c_str())+
 				    strlen(ROM_SETTINGS.goodname)+4+1);
-		  strcpy(filename, get_savespath());
+		  strcpy(filename, get_savespath().c_str());
 		  strcat(filename, ROM_SETTINGS.goodname);
 		  strcat(filename, ".fla");
 		  f = fopen(filename, "rb");
@@ -188,9 +188,9 @@ void dma_read_flashram()
 	rdram[pi_register.pi_dram_addr_reg/4+1] = (unsigned long)(status);
 	break;
       case READ_MODE:
-	filename = (char*)malloc(strlen(get_savespath())+
+	filename = (char*)malloc(strlen(get_savespath().c_str())+
 			  strlen(ROM_SETTINGS.goodname)+4+1);
-	strcpy(filename, get_savespath());
+	strcpy(filename, get_savespath().c_str());
 	strcat(filename, ROM_SETTINGS.goodname);
 	strcat(filename, ".fla");
 	f = fopen(filename, "rb");

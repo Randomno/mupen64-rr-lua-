@@ -23,8 +23,6 @@
 #endif
 #include <commctrl.h>
 
-#include "../md5.h"
-
 typedef struct {
 	char     szFullFileName[MAX_PATH];
 	char     Status[60];
@@ -65,6 +63,9 @@ typedef struct {
 	ROM_INFO * List;
 } ITEM_LIST;
 
+
+// FIXME: hack to get this to compile without zlib
+#define md5_byte_t char
 
 void AddRomToList (char * RomLocation) ;
 void RomList_GetDispInfo(LPNMHDR pnmh) ;

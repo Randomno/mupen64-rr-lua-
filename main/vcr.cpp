@@ -3,8 +3,8 @@
 
 #include "../lua/LuaConsole.h"
 
-#include "vcr.h"
-#include "vcr_compress.h"
+#include "vcr.hpp"
+#include "win/vcr_compress.h"
 #include "vcr_resample.h"
 
 //ffmpeg
@@ -13,7 +13,7 @@
 
 #include "plugin.h"
 #include "rom.h"
-#include "savestates.h"
+#include "savestates.hpp"
 #include "../memory/memory.h"
 
 #include <errno.h>
@@ -35,21 +35,12 @@
 #include <time.h>
 #include <chrono>
 
-#ifndef __WIN32__
-#include <gtk/gtk.h> // for getting callback_startEmulation and callback_stopEmulation
-#include <unistd.h> // for truncate
-#include <gui_gtk/messagebox.h>
-#define stricmp strcasecmp
-#else
 #include <commctrl.h> // for SendMessage, SB_SETTEXT
 #include <windows.h> // for truncate functions
-#include <../../winproject/resource.h> // for EMU_RESET
-#include "win/Config.h" //config struct
-#include "win/main_win.h" // mainHWND
+#include "../winproject/resource.h"
+#include "win/Config.hpp" //config struct
+#include "win/main_win.hpp" // mainHWND
 #include <WinUser.h>
-#include "win/DebugInfo.hpp"
-
-#endif
 
 #ifdef _DEBUG
 #include "../r4300/macros.h"
@@ -70,7 +61,7 @@
 #define MAX_AVI_SIZE 0x7B9ACA00
 
 //stop AVI at m64 end, set by command line avi
-bool gStopAVI = false;
+int gStopAVI = false;
 bool captureMarkedStop;
 BOOL dontPlay = false;
 
@@ -245,41 +236,24 @@ int movieBackup() {
 
 void printWarning(const char* str)
 {
-#ifdef __WIN32__
 	extern BOOL cmdlineNoGui;
 	if (cmdlineNoGui)
 		printf("Warning: %s\n", str);
 	else
 		MessageBox(NULL, str, "Warning", MB_OK | MB_ICONWARNING);
-#else
-	extern int g_GuiEnabled;
-	if (!g_GuiEnabled)
-		printf("Warning: %s\n", str);
-	else
-		messagebox(tr("Warning"), MB_OK, str);
-#endif
 }
 
 void printError(const char* str)
 {
-#ifdef __WIN32__
 	extern BOOL cmdlineNoGui;
 	if (cmdlineNoGui)
 		fprintf(stderr, "Error: %s\n", str);
 	else
 		MessageBox(NULL, str, "Error", MB_OK | MB_ICONERROR);
-#else
-	extern int g_GuiEnabled;
-	if (!g_GuiEnabled)
-		fprintf(stderr, "Error: %s\n", str);
-	else
-		messagebox(tr("Error"), MB_OK, str);
-#endif
 }
 
 static void hardResetAndClearAllSaveData(bool clear)
 {
-#ifdef __WIN32__
 	//	extern void resetEmu();
 	extern BOOL clear_sram_on_restart_mode;
 	extern BOOL continue_vcr_on_restart_mode;
@@ -293,13 +267,6 @@ static void hardResetAndClearAllSaveData(bool clear)
 		printf("Playing movie without clearing save data\n");
 	//	resetEmu();
 	SendMessage(mainHWND, WM_COMMAND, EMU_RESET, 0);
-#else
-	extern void callback_startEmulation(GtkWidget * widget, gpointer data);
-	extern void callback_stopEmulation(GtkWidget * widget, gpointer data);
-	callback_stopEmulation(NULL, NULL);
-	VCR_clearAllSaveData();
-	callback_startEmulation(NULL, NULL);
-#endif
 }
 
 static int visByCountrycode()
@@ -627,15 +594,14 @@ SMovieHeader VCR_getHeaderInfo(const char* filename)
 void VCR_clearAllSaveData()
 {
 	int i;
-	extern const char* get_savespath(); // defined in either win\guifuncs.c or gui_gtk/main_gtk.c
 
 	// clear SRAM
 	{
 		char* filename;
 		FILE* f;
-		filename = (char*)malloc(strlen(get_savespath()) +
+		filename = (char*)malloc(strlen(get_savespath().c_str()) +
 			strlen(ROM_SETTINGS.goodname) + 4 + 1);
-		strcpy(filename, get_savespath());
+		strcpy(filename, get_savespath().c_str());
 		strcat(filename, ROM_SETTINGS.goodname);
 		strcat(filename, ".sra");
 		f = fopen(filename, "rb");
@@ -658,9 +624,9 @@ void VCR_clearAllSaveData()
 		char* filename;
 		FILE* f;
 		int i;
-		filename = (char*)malloc(strlen(get_savespath()) +
+		filename = (char*)malloc(strlen(get_savespath().c_str()) +
 			strlen(ROM_SETTINGS.goodname) + 4 + 1);
-		strcpy(filename, get_savespath());
+		strcpy(filename, get_savespath().c_str());
 		strcat(filename, ROM_SETTINGS.goodname);
 		strcat(filename, ".eep");
 		f = fopen(filename, "rb");
@@ -682,9 +648,9 @@ void VCR_clearAllSaveData()
 	{
 		char* filename;
 		FILE* f;
-		filename = (char*)malloc(strlen(get_savespath()) +
+		filename = (char*)malloc(strlen(get_savespath().c_str()) +
 			strlen(ROM_SETTINGS.goodname) + 4 + 1);
-		strcpy(filename, get_savespath());
+		strcpy(filename, get_savespath().c_str());
 		strcat(filename, ROM_SETTINGS.goodname);
 		strcat(filename, ".mpk");
 
@@ -789,11 +755,11 @@ VCR_setReadOnly(BOOL val)
 	m_readOnly = val;
 }
 
-bool VCR_isLooping() {
+int VCR_isLooping() {
 	return Config.is_movie_loop_enabled;
 }
 
-bool VCR_isRestarting() {
+int VCR_isRestarting() {
 	return is_restarting_flag;
 }
 
@@ -1798,16 +1764,13 @@ stopPlayback(bool bypassLoopSetting)
 		m_task = Idle;
 		printf("[VCR]: Playback stopped (%ld samples played)\n", m_currentSample);
 
-#ifdef __WIN32__
 		extern void EnableEmulationMenuItems(BOOL flag);
 		EnableEmulationMenuItems(TRUE);
 
 		extern HWND hStatus;
 		SendMessage(hStatus, SB_SETTEXT, 1, (LPARAM)"");
 		SendMessage(hStatus, SB_SETTEXT, 0, (LPARAM)"Stopped playback.");
-#else
-		// FIXME: how to update enable/disable state of StopPlayback and StopRecord with gtk GUI?
-#endif
+
 		if (m_inputBuffer)
 		{
 			free(m_inputBuffer);
@@ -2063,9 +2026,7 @@ static void writeSound(char* buf, int len, int minWriteSize, int maxWriteSize, B
 	{
 		if (soundBufPos + len > SOUND_BUF_SIZE * sizeof(char))
 		{
-#ifdef WIN32
 			MessageBox(0, "Fatal error", "Sound buffer overflow", MB_ICONERROR);
-#endif
 			printf("SOUND BUFFER OVERFLOW\n");
 			return;
 		}

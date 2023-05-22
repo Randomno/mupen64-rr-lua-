@@ -44,7 +44,7 @@
 #include "../memory/tlb.h"
 
 #define LUACONSOLE_H_NOINCLUDE_WINDOWS_H
-#include "../../main/win/GameDebugger.h"
+#include "../main/win/GameDebugger.hpp"
 
 #ifdef DBG
 extern int debugger_mode;
@@ -3211,7 +3211,7 @@ void pure_interpreter()
 	if (debugger_mode) update_debugger();
 #endif
 #ifdef GAME_DEBUGGER
-	while (!gameDebuggerIsResumed) { _sleep(10); }
+	while (!gameDebuggerIsResumed) { Sleep(10); }
 	GameDebuggerOnLateCycle();
 #endif
 

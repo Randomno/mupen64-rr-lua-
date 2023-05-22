@@ -19,18 +19,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "rombrowser.h"
-#include "main_win.h"
+#include "main_win.hpp"
 #include "../../winproject/resource.h"
 #include "../rom.h"
-#include "../md5.h"
+#include "../lib/md5.h"
 #include <zlib.h>
-#include "inifunctions.h"
-#include "../guifuncs.h"
+#include "../lib/inifunctions.h"
+#include "guifuncs.hpp"
 #include "../plugin.h"
-#include "configdialog.h"
+#include "configdialog.hpp"
 #include "RomSettings.h"
-#include "translation.h"
-#include "Config.h"
+#include "translation.hpp"
+#include "Config.hpp"
 #include <string>
 
 static int TOTAL_ROMS_NUMBER = 0;
@@ -686,7 +686,7 @@ LRESULT CALLBACK RomPropertiesProc(HWND hwnd, UINT Message, WPARAM wParam, LPARA
                     ShowWindow( hwndPB, TRUE );                                //Shows Progress bar
                                         
                     calculateGlobalStop = 0;
-                    calculateMD5(pRomInfo->szFullFileName,digest);
+                    calculateMD5(pRomInfo->szFullFileName, (unsigned char*)digest);
                     MD5toString(digest,TempMessage);
                     SetDlgItemText(hwnd, IDC_ROM_MD5, TempMessage);
                     if(getIniGoodNameByMD5(TempMessage,tempname))

@@ -27,11 +27,12 @@
 #include "rombrowser.h"
 #include "commandline.h"
 #include "../../winproject/resource.h"
-#include "config.h"
+#include "config.hpp"
 
-#include "../lua/Recent.h"
-#include <vcr.h>
-#include "translation.h"
+#include "../../lua/Recent.h"
+#include "../vcr.hpp"
+#include "translation.hpp"
+#include "../lib/ini.h"
 
 CONFIG Config;
 std::vector<t_hotkey*> hotkeys;
@@ -111,7 +112,6 @@ void hotkey_to_string(t_hotkey* hotkeys, char* buf)
 	}
 }
 
-#include "../ini.h"
 
 
 CONFIG get_default_config()

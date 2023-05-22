@@ -20,7 +20,7 @@
 #include "rombrowser.h"
 #include "dumplist.h"
 #include "../../winproject/resource.h"
-#include "main_win.h"
+#include "main_win.hpp"
 //#include "process.h"
 
 FILE  *dumpfile;

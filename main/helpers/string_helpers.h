@@ -1,3 +1,6 @@
+#include <string.h>
+#include <ctype.h>
+
 inline static char* stristr( const char* str1, const char* str2 )
 {
     const char* p1 = str1 ;

@@ -37,10 +37,10 @@
 #include <malloc.h>
 #include "pif.h"
 #include "flashram.h"
-#include "../main/guifuncs.h"
+#include "../main/win/guifuncs.hpp"
 #include "../r4300/ops.h"
-#include "../main/win/GameDebugger.h"
-#include "savestates.h"
+#include "../main/savestates.hpp"
+#include "../main/win/GameDebugger.hpp"
 
 unsigned char sram[0x8000];
 
@@ -55,9 +55,9 @@ void dma_pi_read()
 	  {
 	     char *filename;
 	     FILE *f;
-	     filename = (char*)malloc(strlen(get_savespath())+
+	     filename = (char*)malloc(strlen(get_savespath().c_str())+
 			       strlen(ROM_SETTINGS.goodname)+4+1);
-	     strcpy(filename, get_savespath());
+	     strcpy(filename, get_savespath().c_str());
 	     strcat(filename, ROM_SETTINGS.goodname);
 	     strcat(filename, ".sra");
 	     f = fopen(filename, "rb");
@@ -101,9 +101,9 @@ void dma_pi_write()
 		  char *filename;
 		  FILE *f;
 		  int i;
-		  filename = (char*)malloc(strlen(get_savespath())+
+		  filename = (char*)malloc(strlen(get_savespath().c_str())+
 				    strlen(ROM_SETTINGS.goodname)+4+1);
-		  strcpy(filename, get_savespath());
+		  strcpy(filename, get_savespath().c_str());
 		  strcat(filename, ROM_SETTINGS.goodname);
 		  strcat(filename, ".sra");
 		  f = fopen(filename, "rb");

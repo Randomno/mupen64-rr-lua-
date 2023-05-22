@@ -35,8 +35,8 @@
 #include "../main/winlnxdefs.h"
 #else
 #include <windows.h>
-#include "../main/win/main_win.h"
-#include "../main/win/Config.h"
+#include "../main/win/main_win.hpp"
+#include "../main/win/Config.hpp"
 #endif
 
 #include "memory.h"
@@ -49,8 +49,8 @@
 #include "pif.h"
 #include "flashram.h"
 #include "../main/plugin.h"
-#include "../main/guifuncs.h"
-#include "../main/vcr.h"
+#include "../main/win/guifuncs.hpp"
+#include "../main/vcr.hpp"
 
 extern BOOL manualFPSLimit; //0 = ff enabled
 static int frame;

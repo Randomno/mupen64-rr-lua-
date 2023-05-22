@@ -24,9 +24,9 @@
 #define _WIN32_IE 0x0500
 #endif
 #include <commctrl.h>
-#include "translation.h"
+#include "translation.hpp"
 #include "../../winproject/resource.h"
-#include "main_win.h"
+#include "main_win.hpp"
 
 static int LastLang = -1; 
 

@@ -4,7 +4,6 @@
 // Comment this define to exclude LUA extension from compile
 #define LUA_MODULEIMPL
 
-#ifdef WIN32
 
 #ifdef LUA_MODULEIMPL
 
@@ -25,8 +24,6 @@
 
 #define LUA_LIB
 
-
-#endif
 
 #endif
 

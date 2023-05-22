@@ -65,7 +65,6 @@ typedef struct _rom_header
 extern rom_header *ROM_HEADER;
 
 
-
 typedef struct _rom_settings
 {
    char goodname[256];

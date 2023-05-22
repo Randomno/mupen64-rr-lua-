@@ -30,13 +30,12 @@
 #include <windows.h>
 #include <commctrl.h>
 #include <stdio.h>
-#include "../win/main_win.h"
+#include "../win/main_win.hpp"
 
-#include "../vcr_compress.h"
+#include "vcr_compress.h"
 #include "../plugin.h"
 #include "../../winproject/resource.h"
 #include "vfw.h"
-#include "GUI_LogWindow.h"
 
 #ifndef _MSC_VER
 void (*readScreen)(void **dest, long *width, long *height);
@@ -98,7 +97,7 @@ void CalculateWindowDimensions(HWND hWindow, SWindowInfo& infoStruct)
 // sInfo struct is filled during VCR_startCapture 
 void __cdecl win_readScreen(void **dest, long *width, long *height)
 {
-	HDC mupendc, all, copy; //all - screen; copy - buffer
+	HDC mupendc, all = 0, copy; //all - screen; copy - buffer
 	//RECT rect, rectS, rectT;
 	POINT cli_tl{ 0,0 }; //mupen client x y 
 	HBITMAP bitmap, oldbitmap;

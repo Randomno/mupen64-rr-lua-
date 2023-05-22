@@ -1,14 +1,14 @@
-#include <LuaConsole.h>
+#include "../../lua/LuaConsole.h"
 
-#include "../resource.h"
-#include "../main/win/main_win.h"
-#include "GameDebugger.h"
+#include "../../winproject/resource.h"
+#include "../win/main_win.hpp"
+#include "GameDebugger.hpp"
 #include <stdio.h>
-#include "vcr.h"
+#include "../vcr.hpp"
 #include <Windows.h>
 #include "../../r4300/r4300.h"
 #include "../../memory/memory.h"
-#include "disasm.h"
+#include "../disasm.h"
 
 int gameDebuggerIsResumed = true;
 int gameDebuggerIsDmaReadEnabled = true; 

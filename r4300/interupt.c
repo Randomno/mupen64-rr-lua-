@@ -46,11 +46,11 @@
 #include "macros.h"
 #include "exception.h"
 #include "../main/plugin.h"
-#include "../main/guifuncs.h"
-#include "../main/savestates.h"
-#include "../main/vcr.h"
-#include "../main/win/Config.h"
-#include "../main/win/main_win.h"
+#include "../main/win/guifuncs.hpp"
+#include "../main/savestates.hpp"
+#include "../main/vcr.hpp"
+#include "../main/win/Config.hpp"
+#include "../main/win/main_win.hpp"
 
 unsigned long next_vi;
 int vi_field = 0;

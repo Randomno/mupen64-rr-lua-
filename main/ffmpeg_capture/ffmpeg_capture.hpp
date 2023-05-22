@@ -3,7 +3,7 @@
 #include <queue>
 #include <mutex>
 
-#include "vcr_compress.h"
+#include "../win/vcr_compress.h"
 
 #ifdef _DEBUG
 #define FFMPEG_BENCHMARK

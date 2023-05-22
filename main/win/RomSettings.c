@@ -16,7 +16,7 @@
 
 #include <windows.h>
 #include <ctype.h>
-#include "main_win.h"
+#include "main_win.hpp"
 #include "RomSettings.h"
 
 #define ROM_SETIINGS_FILE "romsettings.ini"

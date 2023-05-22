@@ -21,6 +21,8 @@ This version includes <a href="https://imgur.com/a/SA2CgEB" target="_blank">new 
 (This was written having Windows in mind, but it should be possible on Linux as well)
 If you want to build Mupen/TASInput on your own, you will need Visual Studio (2017 or 2019 recommended) with C++ packages installed. In repository you will find two solutions files `winproject\mupen64\mupen_2017.sln` and `tasinput_plugin\src\DefDI.sln` used to compile Mupen or TASInput respectively. 
 
+install vcpkg and run vs integration
+install zlib and minizip packages
 Open either mupen or tasinput solution, on the top you can select Release or Debug build target, press F5 to compile and run with debugger attached. Binaries are placed inside the respective `bin` folder
 
 # Debugging

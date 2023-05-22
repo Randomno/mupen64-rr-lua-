@@ -37,7 +37,7 @@
 #include "../exception.h"
 #include "interpret.h"
 #define LUACONSOLE_H_NOINCLUDE_WINDOWS_H
-#include "../lua/LuaConsole.h"
+#include "../../lua/LuaConsole.h"
 
 
 void gensll()

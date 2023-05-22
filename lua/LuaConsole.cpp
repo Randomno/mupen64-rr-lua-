@@ -11,25 +11,23 @@
 #include <map>
 #include <list>
 #include <filesystem>
-#include "../../winproject/resource.h"
-#include "win/DebugInfo.hpp"
-#include "win/main_win.h"
-#include "win/Config.h"
+#include "../winproject/resource.h"
+#include "../main/win/main_win.hpp"
+#include "../main/win/Config.hpp"
 #include "include/lua.hpp"
 #include "../memory/memory.h"
 #include "../r4300/r4300.h"
 #include "../r4300/recomp.h"
 #include "../main/plugin.h"
 #include "../main/disasm.h"
-#include "../main/vcr.h"
-#include "../main/savestates.h"
-#include "../main/win/Config.h"
-#include "../main/win/configdialog.h"
+#include "../main/vcr.hpp"
+#include "../main/savestates.hpp"
+#include "../main/win/Config.hpp"
+#include "../main/win/configdialog.hpp"
 #include "../main/win/wrapper/ReassociatingFileDialog.h"
-#include <vcr.h>
+#include "../main/vcr.hpp"
 #include <gdiplus.h>
-#include "../main/vcr_compress.h"
-
+#include "../main/win/vcr_compress.h"
 
 #ifdef LUA_MODULEIMPL
 //nice msvc pragma smh
@@ -863,7 +861,7 @@ void InitializeLuaDC_(HWND mainWnd){
 	if (luaDC) {
 		FinalizeLuaDC();
 	}
-	HDC mainDC;
+	HDC mainDC = 0;
 	RECT r;
 	GetClientRect(mainWnd, &r);
 	luaDC = GetDC(mainWnd);
@@ -1053,22 +1051,18 @@ void registerFuncEach(int(*f)(lua_State*), const char *key) {
 		it != luaWindows.end(); it ++) {
 		Lua *lua = GetWindowLua(*it);
 		if(lua && lua->isrunning()) {
-#ifdef WIN32
 			//ensure thread safety (load and savestate callbacks for example)
 			DWORD waitResult = WaitForSingleObject(lua->hMutex,INFINITE);
 			switch (waitResult)
 			{
 			case WAIT_OBJECT_0:
-#endif
 				if (lua->registerFuncEach(f, key)) {
 					printf("!ERRROR, RETRY\n");
 					//if error happened, try again (but what if it fails again and again?)
 					registerFuncEach(f, key);
 					return;
 				}
-#ifdef WIN32
 				ReleaseMutex(lua->hMutex);
-#endif
 			}
 		}
 	}
@@ -3489,11 +3483,9 @@ void NewLuaScript(void(*callback)()) {
 
 void CloseAllLuaScript(void) {
 	if (LuaEngine::luaWindowMap.empty()||LuaEngine::luaWindows.empty()) { 
-		MUPEN64RR_DEBUGINFO("No scripts running");
 		anyLuaRunning = false;
 		return;
 	}
-	MUPEN64RR_DEBUGINFO("Close all scripts");
 	LuaEngine::LuaMessage::Msg *msg = new LuaEngine::LuaMessage::Msg();
 	msg->type = LuaEngine::LuaMessage::CloseAll;
 	LuaEngine::luaMessage.post(msg);

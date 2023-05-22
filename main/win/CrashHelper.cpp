@@ -1,6 +1,6 @@
-#include "CrashHelper.h"
-#include "main_win.h"
-#include <vcr.h>
+#include "CrashHelper.hpp"
+#include "main_win.hpp"
+#include "../vcr.hpp"
 #include <Psapi.h>
 
 

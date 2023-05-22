@@ -16,59 +16,46 @@
   ***************************************************************************/
 
 
-#include "LuaConsole.h"
+#include "../../lua/LuaConsole.h"
 
-#include "Recent.h"
-#include "win/DebugInfo.hpp"
-#include "ffmpeg_capture/ffmpeg_capture.hpp"
-
-#if defined(__cplusplus) && !defined(_MSC_VER)
-extern "C" {
-#endif
+#include "../../lua/LuaConsole.h"
+#include "../ffmpeg_capture/ffmpeg_capture.hpp"
 
 #include <windows.h> // TODO: Include Windows.h not windows.h and see if it breaks
 #include <Shlwapi.h>
-#ifndef _WIN32_IE
-#define _WIN32_IE 0x0500
-#endif
 #include <commctrl.h>
 #include <stdlib.h>
 #include <math.h>
 #include <filesystem>
-#ifndef _MSC_VER
-#include <dirent.h>
-#endif
 #include "../../winproject/resource.h"
 #include "../plugin.h"
 #include "../rom.h"
 #include "../../r4300/r4300.h"
 #include "../../memory/memory.h"
-#include "translation.h"
+#include "translation.hpp"
 #include "rombrowser.h"
-#include "main_win.h"
-#include "configdialog.h"
-#include "../guifuncs.h"
+#include "main_win.hpp"
+#include "configdialog.hpp"
+#include "guifuncs.hpp"
 #include "../mupenIniApi.h"
-#include "../savestates.h"
+#include "../savestates.hpp"
 #include "dumplist.h"
 #include "timers.h"
-#include "config.h"
+#include "config.hpp"
 #include "RomSettings.h"
-#include "GUI_logwindow.h"
 #include "commandline.h"
-#include "CrashHandlerDialog.h"
-#include "CrashHelper.h"
+#include "CrashHandlerDialog.hpp"
+#include "CrashHelper.hpp"
 #include "wrapper/ReassociatingFileDialog.h"
-#include "../vcr.h"
+#include "../vcr.hpp"
 #include "../../r4300/recomph.h"
 
 #define EMULATOR_MAIN_CPP_DEF
-#include "kaillera.h"
 #include "../../memory/pif.h"
 #undef EMULATOR_MAIN_CPP_DEF
 
 #include <gdiplus.h>
-#include "../main/win/GameDebugger.h"
+#include "GameDebugger.hpp"
 
 #pragma comment (lib,"Gdiplus.lib")
 
@@ -82,10 +69,6 @@ extern "C" {
 
 	bool ffup = false;
 	BOOL forceIgnoreRSP = false;
-
-#if defined(__cplusplus) && !defined(_MSC_VER)
-}
-#endif
 
 
 
@@ -654,7 +637,6 @@ void search_plugins()
 			String pluginPath;
 			pluginPath.assign(pluginDir)
 				.append("\\").append(entry.cFileName);
-			MUPEN64RR_DEBUGINFO(pluginPath);
 
 			HMODULE pluginHandle = LoadLibrary(pluginPath.c_str());
 			if (pluginHandle != NULL
@@ -1198,14 +1180,13 @@ void WaitEmuThread()
 	if (EmuThreadHandle != NULL || ExitCode != 0) {
 
 		if (EmuThreadHandle != NULL) {
-			ShowError("Abnormal emu thread termination!");
+			MessageBox(NULL, NULL, "Abnormal emu thread termination", MB_ICONERROR);
 			TerminateThread(EmuThreadHandle, 0);
 			EmuThreadHandle = NULL;
 		}
 
 		char str[256];
 		sprintf(str, "There was a problem with %s.", ThreadFuncStateDescription[ThreadFuncState]);
-		ShowError(str);
 		sprintf(str, "%s\nYou should quit and re-open the emulator before doing anything else,\nor you may encounter serious errors.", str);
 		MessageBox(NULL, str, "Warning", MB_OK);
 	}
@@ -1338,8 +1319,7 @@ BOOL StartRom(char* fullRomPath)
 			ShowRomBrowser(FALSE, FALSE);
 			SaveGlobalPlugins(TRUE);
 		}
-		ShowInfo("");
-		ShowWarning("Starting ROM: %s ", ROM_SETTINGS.goodname);
+		ShowInfo("Starting ROM: %s ", ROM_SETTINGS.goodname);
 
 		SetStatusMode(2);
 
@@ -1393,8 +1373,6 @@ DWORD WINAPI closeRom(LPVOID lpParam) //lpParam - treated as bool, show romlist?
 		stop_it();
 
 		WaitEmuThread();
-
-		EndGameKaillera();
 
 		/*romClosed_input();
 		ShowInfo("Emu thread: romClosed (input plugin)");
@@ -2988,10 +2966,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 		{
 		case ID_MENU_LUASCRIPT_NEW:
 		{
-			//if (!IsMenuItemEnabled(hMenu, ID_LUA_LOAD_LATEST))
 			EnableRecentScriptsMenu(hMenu, TRUE);
 #ifdef LUA_MODULEIMPL
-			MUPEN64RR_DEBUGINFO("LuaScript New");
 			::NewLuaScript((void(*)())lParam);
 #endif
 		} break;
@@ -3376,7 +3352,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 				// if no extension inputted by user, fallback to .st
 				strcpy(correctedPath, path_buffer);
 				stripExt(correctedPath);
-				if (!stricmp(getExt(path_buffer), "savestate"))
+				if (!_stricmp(getExt(path_buffer), "savestate"))
 					strcat(correctedPath, ".savestate");
 				else
 					strcat(correctedPath, ".st");
@@ -3579,11 +3555,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
 			break;
 		case ID_LOAD_LATEST:
 			RunRecentRom(ID_RECENTROMS_FIRST);
-		case ID_LOG_WINDOW:
-			ShowHideLogWindow();
-			break;
-		case ID_KAILLERA:
-			CreateThread(NULL, 0, KailleraThread, NULL, 0, &SOUNDTHREADID);
 			break;
 		case IDC_GUI_TOOLBAR:
 			Config.is_toolbar_enabled = 1 - Config.is_toolbar_enabled;
@@ -3872,9 +3843,6 @@ int WINAPI WinMain(
 			CW_USEDEFAULT, CW_USEDEFAULT, 600, 400,
 			NULL, NULL, hInstance, NULL);
 
-#ifdef _DEBUG
-		GUI_CreateLogWindow(hwnd);
-#endif
 		mainHWND = hwnd;
 		ShowWindow(hwnd, nCmdShow);
 		UpdateWindow(hwnd);
@@ -3941,14 +3909,6 @@ int WINAPI WinMain(
 		UpdateWindow(hwnd);
 #endif
 		EnableMenuItem(GetMenu(hwnd), ID_LOG_WINDOW, MF_DISABLED);
-#ifdef _DEBUG
-		if (GUI_CreateLogWindow(mainHWND)) EnableMenuItem(GetMenu(hwnd), ID_LOG_WINDOW, MF_ENABLED);
-#endif
-
-		if (!isKailleraExist())
-		{
-			DeleteMenu(GetMenu(hwnd), ID_KAILLERA, MF_BYCOMMAND);
-		}
 
 		SetupDummyInfo();
 
@@ -4036,7 +3996,5 @@ int WINAPI WinMain(
 	}
 
 	save_config();
-	CloseLogWindow();
-	CloseKaillera();
 	return Msg.wParam;
 }

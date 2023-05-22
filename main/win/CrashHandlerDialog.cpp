@@ -1,5 +1,5 @@
-#include "CrashHandlerDialog.h"
-#include "main_win.h"
+#include "CrashHandlerDialog.hpp"
+#include "main_win.hpp"
 #include "../../winproject/resource.h"
 #include <wingdi.h>
 #pragma comment(lib, "Msimg32.lib") // TransparentBlt

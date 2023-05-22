@@ -21,13 +21,13 @@
 #define _WIN32_IE 0x0500
 #endif
 #include <commctrl.h>
-#include "../guifuncs.h"
-#include "main_win.h"
+#include "timers.h"
+#include "main_win.hpp"
 #include "../rom.h"
-#include "translation.h"
-#include "../vcr.h"
+#include "translation.hpp"
+#include "../vcr.hpp"
 #include "../../winproject/resource.h"
-#include <win/CrashHandlerDialog.h>
+#include "CrashHandlerDialog.hpp"
 
 //c++!!!
 #include <chrono>

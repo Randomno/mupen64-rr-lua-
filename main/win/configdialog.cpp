@@ -22,25 +22,23 @@
 
 #include <shlobj.h>
 #include <stdio.h>
-#include "../lua/LuaConsole.h"
-#include "main_win.h"
+#include "../../lua/LuaConsole.h"
+#include "main_win.hpp"
 #include "../../winproject/resource.h"
 #include "../plugin.h"
 #include "rombrowser.h"
-#include "../guifuncs.h"
-#include "../md5.h"
+#include "guifuncs.hpp"
+//#include "../lib/md5.h"
 #include "timers.h"
-#include "translation.h"
-#include "Config.h"
+#include "translation.hpp"
+#include "Config.hpp"
 #include "../rom.h"
-#include "inifunctions.h"
-  // its a hpp header
-#include "../main/win/wrapper/ReassociatingFileDialog.h"
-#include "../main/helpers/string_helpers.h"
+#include "wrapper/ReassociatingFileDialog.h"
+#include "../helpers/string_helpers.h"
 
 
-#include "configdialog.h"
-#include <vcr.h>
+#include "configdialog.hpp"
+#include "../vcr.hpp"
 // ughh msvc-only code once again
 #pragma comment(lib,"comctl32.lib") 
 #pragma comment(lib,"propsys.lib")

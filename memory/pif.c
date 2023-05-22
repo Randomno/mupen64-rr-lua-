@@ -48,10 +48,10 @@
 #include "../r4300/r4300.h"
 #include "../r4300/interupt.h"
 #include "../main/plugin.h"
-#include "../main/guifuncs.h"
-#include "../main/vcr.h"
-#include "../main/savestates.h"
-#include "../main/win/Config.h"
+#include "../main/win/guifuncs.hpp"
+#include "../main/vcr.hpp"
+#include "../main/savestates.hpp"
+#include "../main/win/Config.hpp"
 
 unsigned char eeprom[0x800];
 unsigned char mempack[4][0x8000];
@@ -97,9 +97,9 @@ void EepromCommand(BYTE* Command)
 		char* filename;
 		FILE* f;
 		int i;
-		filename = (char*)malloc(strlen(get_savespath()) +
+		filename = (char*)malloc(strlen(get_savespath().c_str()) +
 			strlen(ROM_SETTINGS.goodname) + 4 + 1);
-		strcpy(filename, get_savespath());
+		strcpy(filename, get_savespath().c_str());
 		strcat(filename, ROM_SETTINGS.goodname);
 		strcat(filename, ".eep");
 		f = fopen(filename, "rb");
@@ -118,9 +118,9 @@ void EepromCommand(BYTE* Command)
 		char* filename;
 		FILE* f;
 		int i;
-		filename = (char*)malloc(strlen(get_savespath()) +
+		filename = (char*)malloc(strlen(get_savespath().c_str()) +
 			strlen(ROM_SETTINGS.goodname) + 4 + 1);
-		strcpy(filename, get_savespath());
+		strcpy(filename, get_savespath().c_str());
 		strcat(filename, ROM_SETTINGS.goodname);
 		strcat(filename, ".eep");
 		f = fopen(filename, "rb");
@@ -284,9 +284,9 @@ void internal_ControllerCommand(int Control, BYTE* Command)
 					{
 						char* filename;
 						FILE* f;
-						filename = (char*)malloc(strlen(get_savespath()) +
+						filename = (char*)malloc(strlen(get_savespath().c_str()) +
 							strlen(ROM_SETTINGS.goodname) + 4 + 1);
-						strcpy(filename, get_savespath());
+						strcpy(filename, get_savespath().c_str());
 						strcat(filename, ROM_SETTINGS.goodname);
 						strcat(filename, ".mpk");
 						f = fopen(filename, "rb");
@@ -338,9 +338,9 @@ void internal_ControllerCommand(int Control, BYTE* Command)
 					{
 						char* filename;
 						FILE* f;
-						filename = (char*)malloc(strlen(get_savespath()) +
+						filename = (char*)malloc(strlen(get_savespath().c_str()) +
 							strlen(ROM_SETTINGS.goodname) + 4 + 1);
-						strcpy(filename, get_savespath());
+						strcpy(filename, get_savespath().c_str());
 						strcat(filename, ROM_SETTINGS.goodname);
 						strcat(filename, ".mpk");
 						f = fopen(filename, "rb");

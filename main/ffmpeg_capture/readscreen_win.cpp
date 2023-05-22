@@ -1,9 +1,8 @@
 #include <Windows.h>
 
-#include "win/main_win.h"
+#include "../win/main_win.hpp"
 #include "ffmpeg_capture.hpp"
-#include "win/GUI_LogWindow.h"
-#include "plugin.h"
+#include "../plugin.h"
 
 SWindowInfo gSInfo{};
 BITMAPINFO gBMPInfo{}; //Needed for GetDIBits
@@ -34,7 +33,7 @@ void PrepareBitmapHeader(HWND hMain, HBITMAP bitmap)
 //based on original one for AVI
 void FFMpegReadScreen(void** dest, long* width, long* height)
 {
-	HDC mupendc, all, copy; //all - screen; copy - buffer
+	HDC mupendc, all = 0, copy; //all - screen; copy - buffer
 	//RECT rect, rectS, rectT;
 	POINT cli_tl{ 0,0 }; //mupen client x y 
 	HBITMAP bitmap, oldbitmap;
@@ -120,9 +119,7 @@ void FFMpegReadScreen(void** dest, long* width, long* height)
 
 void InitReadScreenFFmpeg(const SWindowInfo& info)
 {
-#ifdef __WIN32__
 	ShowInfo((readScreen != NULL) ? (char*)"ReadScreen is implemented by this graphics plugin." : (char*)"ReadScreen not implemented by this graphics plugin (or was forcefully disabled in settings) - substituting...");
-#endif	
 
 	if (readScreen == NULL)
 	{

@@ -24,7 +24,7 @@ jobs:
       id: vcpkg
       with:
         pkgs: zlib minizip
-        triplet: x86-windows-release
+        triplet: x86-windows
         token: ${{ github.token }}
     
     - name: Build

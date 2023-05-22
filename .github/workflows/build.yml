@@ -3,11 +3,10 @@ name: MSBuild
 on: [push]
 
 env:
-  # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: winproject/mupen64/mupen64_2017.sln
-
-  BUILD_CONFIGURATION: Release 
-
+  BUILD_CONFIGURATION: Release
+  VCPKG_ROOT: ./vcpkg
+  
 jobs:
   build:
     runs-on: windows-2022 # dangerous
@@ -19,13 +18,17 @@ jobs:
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
-    - name: vcpkg build
-      uses: johnwason/vcpkg-action@v4
-      id: vcpkg
-      with:
-        pkgs: zlib minizip
-        triplet: x86-windows
-        token: ${{ github.token }}
+    - name: Install vcpkg
+      run: |
+        git clone https://github.com/Microsoft/vcpkg.git
+        cd vcpkg
+        ./bootstrap-vcpkg.bat
+        ./vcpkg integrate install
+
+    - name: Install packages with vcpkg
+      run: |
+        cd vcpkg
+        ./vcpkg install zlib minizip
     
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}

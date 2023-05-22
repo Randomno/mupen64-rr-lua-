@@ -15,17 +15,23 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v1.0.2
 
+    - name: vcpkg build
+      uses: johnwason/vcpkg-action@v4
+      id: vcpkg
+      with:
+        pkgs: zlib minizip
+        triplet: x86-windows-release
+        token: ${{ github.token }}
+    
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v2
       with:
         name: mupen-artifact
         path: winproject/mupen64/bin/mupen64.exe
-        retention-days: 7
